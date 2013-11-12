@@ -41,5 +41,12 @@
 
                     (assert-equal '(term 2 ((x . 2) (y . 2)))
                                   (make-term 2 (make-var-list (make-var 'x 2)
-                                                              (make-var 'y 2))))
+                                                              (make-var 'y 2))))))
+
+             (test test-coeff
+                   ((assert-equal '1
+                                  (coeff '(term 1 ())))
+
+                    (assert-equal '2
+                                  (coeff '(term 2 ((x . 1)))))
                     ))))
