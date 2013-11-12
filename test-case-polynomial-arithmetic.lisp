@@ -51,5 +51,18 @@
                                   (coeff '(term 1 ((x . 1)))))
 
                     (assert-equal '-2
-                                  (coeff '(term -2 ((x . 2)))))
+                                  (coeff '(term -2 ((x . 2)))))))
+
+             (test test-vars
+                   ((assert-equal '()
+                                  (vars '(term 0 ())))
+
+                    (assert-equal '((x . 1))
+                                  (vars '(term 1 ((x . 1)))))
+
+                    (assert-equal '((x . 2))
+                                  (vars '(term 2 ((x . 2)))))
+
+                    (assert-equal '((x . 2) (y . 2))
+                                  (vars '(term 3 ((x . 2) (y . 2)))))
                     ))))

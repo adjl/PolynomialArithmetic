@@ -3,3 +3,4 @@
 (defun make-var (var power) (cons var power))
 
 (defun coeff (term) (cadr term))
+(defun vars (term) (caddr term))
