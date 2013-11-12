@@ -4,3 +4,7 @@
 
 (defun coeff (term) (cadr term))
 (defun vars (term) (caddr term))
+
+(defun term+ (term1 term2)
+  (make-term (+ (coeff term1) (coeff term2))
+             (vars term1)))
