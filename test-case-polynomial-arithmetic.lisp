@@ -58,6 +58,49 @@
                     (assert-equal '((x . 2) (y . 1)) (vars '(term 2 ((x . 2) (y . 1)))))
                     (assert-equal '((x . 2) (y . 2)) (vars '(term 3 ((x . 2) (y . 2)))))))
 
+             (test test-make-poly-of-single-term
+                   ((assert-equal '(poly ((term 1 ())))
+                                  (make-poly (make-term-list
+                                               (make-term 1 (make-var-list)))))
+                    (assert-equal '(poly ((term 1 ((x . 2)))))
+                                  (make-poly (make-term-list
+                                               (make-term 1 (make-var-list (make-var 'x 2))))))
+                    (assert-equal '(poly ((term 1 ((x . 2) (y . 2)))))
+                                  (make-poly (make-term-list
+                                               (make-term 1 (make-var-list (make-var 'x 2)
+                                                                           (make-var 'y 2))))))))
+
+             (test test-make-poly-of-multiple-terms
+                   ((assert-equal '(poly ((term 1 ((x . 2)))
+                                          (term 1 ())))
+                                  (make-poly (make-term-list
+                                               (make-term 1 (make-var-list (make-var 'x 2)))
+                                               (make-term 1 (make-var-list)))))
+                    (assert-equal '(poly ((term 1 ((x . 2)))
+                                          (term 1 ((y . 2)))))
+                                  (make-poly (make-term-list
+                                               (make-term 1 (make-var-list (make-var 'x 2)))
+                                               (make-term 1 (make-var-list (make-var 'y 2))))))
+                    (assert-equal '(poly ((term 1 ((x . 2) (y . 2)))
+                                          (term 1 ())))
+                                  (make-poly (make-term-list
+                                               (make-term 1 (make-var-list (make-var 'x 2)
+                                                                           (make-var 'y 2)))
+                                               (make-term 1 (make-var-list)))))
+                    (assert-equal '(poly ((term 1 ((x . 2) (y . 2)))
+                                          (term 1 ((x . 2)))))
+                                  (make-poly (make-term-list
+                                               (make-term 1 (make-var-list (make-var 'x 2)
+                                                                           (make-var 'y 2)))
+                                               (make-term 1 (make-var-list (make-var 'x 2))))))
+                    (assert-equal '(poly ((term 1 ((x . 2) (y . 2)))
+                                          (term 1 ((x . 2) (z . 2)))))
+                                  (make-poly (make-term-list
+                                               (make-term 1 (make-var-list (make-var 'x 2)
+                                                                           (make-var 'y 2)))
+                                               (make-term 1 (make-var-list (make-var 'x 2)
+                                                                           (make-var 'z 2))))))))
+
              (test test-term+-with-constant-and-constant
                    ((assert-equal '(term 2 ())
                                   (term+ '(term 1 ())

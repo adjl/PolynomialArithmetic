@@ -5,6 +5,9 @@
 (defun coeff (term) (cadr term))
 (defun vars (term) (caddr term))
 
+(defun make-poly (terms) (list 'poly terms))
+(defun make-term-list terms terms)
+
 (defun term+ (term1 term2)
   (make-term (+ (coeff term1) (coeff term2))
              (vars term1)))
