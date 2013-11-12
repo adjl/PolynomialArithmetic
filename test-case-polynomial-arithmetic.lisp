@@ -2,8 +2,14 @@
 
 (test-case 'test-case-polynomial-arithmetic
            '((test test-make-term
-                   ((assert-equal '(term 1 ())
+                   ((assert-equal '(term 0 ())
+                                  (make-term 0 (make-var-list)))
+
+                    (assert-equal '(term 1 ())
                                   (make-term 1 (make-var-list)))
+
+                    (assert-equal '(term -1 ())
+                                  (make-term -1 (make-var-list)))
 
                     (assert-equal '(term 1 ((x . 1)))
                                   (make-term 1 (make-var-list (make-var 'x 1))))
