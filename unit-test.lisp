@@ -5,15 +5,15 @@
 
 (defun test-case (test-case-name tests)
   (labels
-    ((get-test-name () (cadar tests))
-     (get-asserts () (caddar tests))
+    ((get-test-name (tests) (cadar tests))
+     (get-asserts (tests) (caddar tests))
      (test-case-inner (tests tests-passed tests-failed)
        (cond ((null tests)
               (format t "(~a) ~d tests run: ~d passed, ~d failed~%"
                       test-case-name (+ tests-passed tests-failed)
                       tests-passed tests-failed))
-             (t (let* ((test-name (get-test-name))
-                       (asserts (get-asserts))
+             (t (let* ((test-name (get-test-name tests))
+                       (asserts (get-asserts tests))
                        (test-passedp (test test-case-name test-name asserts))
                        (tests-passed (+ tests-passed (if test-passedp 1 0)))
                        (tests-failed (+ tests-failed
@@ -23,14 +23,14 @@
 
 (defun test (test-case-name test-name asserts)
   (labels
-    ((get-assert () (caar asserts))
-     (get-argument1 () (cadar asserts))
-     (get-argument2 () (caddar asserts))
+    ((get-assert (asserts) (caar asserts))
+     (get-argument1 (asserts) (cadar asserts))
+     (get-argument2 (asserts) (caddar asserts))
      (test-inner (asserts passedp)
        (cond ((null asserts) passedp)
-             (t (let* ((assert (get-assertf (get-assert)))
-                       (argument1 (eval (get-argument1)))
-                       (argument2 (eval (get-argument2)))
+             (t (let* ((assert (get-assertf (get-assert asserts)))
+                       (argument1 (eval (get-argument1 asserts)))
+                       (argument2 (eval (get-argument2 asserts)))
                        (assert-passedp (assert test-case-name test-name
                                                argument1 argument2))
                        (passedp (and passedp assert-passedp)))
