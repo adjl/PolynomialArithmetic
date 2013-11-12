@@ -33,19 +33,19 @@
                                                               (make-var 'y 2))))))
 
              (test test-coeff-with-constant
-                   ((assert-equal '1                 (coeff (make-term 1 (make-var-list))))
-                    (assert-equal '-2                (coeff (make-term -2 (make-var-list))))))
+                   ((assert-equal 1                  (coeff (make-term 1 (make-var-list))))
+                    (assert-equal -2                 (coeff (make-term -2 (make-var-list))))))
 
              (test test-coeff-with-single-variable
-                   ((assert-equal '1                 (coeff (make-term 1 (make-var-list (make-var 'x 1)))))
-                    (assert-equal '2                 (coeff (make-term 2 (make-var-list (make-var 'x 2)))))))
+                   ((assert-equal 1                  (coeff (make-term 1 (make-var-list (make-var 'x 1)))))
+                    (assert-equal 2                  (coeff (make-term 2 (make-var-list (make-var 'x 2)))))))
 
              (test test-coeff-with-multiple-variables
-                   ((assert-equal '1                 (coeff (make-term 1 (make-var-list (make-var 'x 1)
+                   ((assert-equal 1                  (coeff (make-term 1 (make-var-list (make-var 'x 1)
                                                                                         (make-var 'y 1)))))
-                    (assert-equal '2                 (coeff (make-term 2 (make-var-list (make-var 'x 2)
+                    (assert-equal 2                  (coeff (make-term 2 (make-var-list (make-var 'x 2)
                                                                                         (make-var 'y 1)))))
-                    (assert-equal '3                 (coeff (make-term 3 (make-var-list (make-var 'x 2)
+                    (assert-equal 3                  (coeff (make-term 3 (make-var-list (make-var 'x 2)
                                                                                         (make-var 'y 2)))))))
 
              (test test-vars-with-constant
