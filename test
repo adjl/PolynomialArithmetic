@@ -1,0 +1,6 @@
+#!/u/u1/masrjb/bin/euscheme -fq
+
+(load "unit-test.lisp")
+
+(test-suite
+  '("test-case-polynomial-arithmetic.lisp"))
