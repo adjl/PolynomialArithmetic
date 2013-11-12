@@ -44,9 +44,12 @@
                                                               (make-var 'y 2))))))
 
              (test test-coeff
-                   ((assert-equal '1
-                                  (coeff '(term 1 ())))
+                   ((assert-equal '0
+                                  (coeff '(term 0 ())))
 
-                    (assert-equal '2
-                                  (coeff '(term 2 ((x . 1)))))
+                    (assert-equal '1
+                                  (coeff '(term 1 ((x . 1)))))
+
+                    (assert-equal '-2
+                                  (coeff '(term -2 ((x . 2)))))
                     ))))
