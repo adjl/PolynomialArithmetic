@@ -49,7 +49,7 @@
          (cons (car vars1) (vars* (cdr vars1) vars2)))
         ((> (sym->val (sym (car vars1))) (sym->val (sym (car vars2))))
          (cons (car vars2) (vars* vars1 (cdr vars2))))
-        (t (cons (make-var (sym (car vars1)) (+ (pow (car vars1)) (pow (car vars2))))
+        (t (cons (make-var (sym (car vars1)) (+ (power (car vars1)) (power (car vars2))))
                  (vars* (cdr vars1) (cdr vars2))))))
 
 (defun make-term (coeff . vars)
@@ -58,23 +58,23 @@
 (defun coeff (term) (cadr term))
 (defun vars (term) (caddr term))
 
-(defun make-var (sym pow)
-  (cons sym pow))
+(defun make-var (sym power)
+  (cons sym power))
 
 (defun sym (var) (car var))
-(defun pow (var) (cdr var))
+(defun power (var) (cdr var))
 
 (defun sym->val (sym)
   (convert sym <string>))
 
 (defun sort-by-order (terms)
-  (qsort (qsort terms term-sym) term-pow))
+  (qsort (qsort terms term-sym) term-power))
 
 (defun term-sym (term)
   (sym->val (sym (car (vars term)))))
 
-(defun term-pow (term)
-  (pow (car (vars term))))
+(defun term-power (term)
+  (power (car (vars term))))
 
 (defun sort-by-sym (vars)
   (qsort vars sym->val))
