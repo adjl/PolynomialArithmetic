@@ -15,3 +15,9 @@
   (cond ((same-orderp term1 term2)
          (make-term (+ (coeff term1) (coeff term2)) (vars term1)))
         (t (make-poly (make-term-list term1 term2)))))
+
+(defun term- (term1 term2)
+  (cond ((same-orderp term1 term2)
+         (make-term (- (coeff term1) (coeff term2)) (vars term1)))
+        (t (make-poly (make-term-list term1
+                                      (make-term (- (coeff term2)) (vars term2)))))))
