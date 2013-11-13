@@ -1,6 +1,5 @@
 (defun test-suite (test-cases)
   (cond (test-cases (load (car test-cases))
-                    (if (cdr test-cases) (newline))
                     (test-suite (cdr test-cases)))))
 
 (defun test-case (test-case-name tests)
