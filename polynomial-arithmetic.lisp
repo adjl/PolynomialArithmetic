@@ -9,6 +9,9 @@
 (defun coeff (term) (cadr term))
 (defun vars (term) (caddr term))
 
+(defun same-orderp (term1 term2) (equal (vars term1) (vars term2)))
+
 (defun term+ (term1 term2)
-  (make-term (+ (coeff term1) (coeff term2))
-             (vars term1)))
+  (cond ((same-orderp term1 term2)
+         (make-term (+ (coeff term1) (coeff term2)) (vars term1)))
+        (t (make-poly (make-term-list term1 term2)))))
