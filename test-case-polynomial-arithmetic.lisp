@@ -1,5 +1,3 @@
-(load "polynomial-arithmetic.lisp")
-
 (test-case 'test-case-polynomial-arithmetic
            '((test test-make-term-with-constant
                    ((assert-equal '(term 1 ())  (make-term 1 (make-var-list)))
@@ -260,13 +258,4 @@
                                   (term* (make-term 1 (make-var-list (make-var 'w 1)
                                                                      (make-var 'x 1)))
                                          (make-term 1 (make-var-list (make-var 'y 1)
-                                                                     (make-var 'z 1)))))))
-
-             (test test-qsort
-                   ((assert-equal '() (qsort '()))
-                    (assert-equal '(1) (qsort '(1)))
-                    (assert-equal '(1 1) (qsort '(1 1)))
-                    (assert-equal '(1 2) (qsort '(1 2)))
-                    (assert-equal '(1 2) (qsort '(2 1)))
-                    (assert-equal '(1 2 2) (qsort '(2 1 2)))
-                    (assert-equal '(1 2 3) (qsort '(3 2 1)))))))
+                                                                     (make-var 'z 1)))))))))
