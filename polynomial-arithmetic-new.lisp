@@ -15,7 +15,8 @@
          (polyreduce-inner (cdr terms) seen))
         (t (cons
              (reduce termreduce
-                     (map (lambda (term) (if (same-orderp (car terms) term) term)) terms))
+                     (map (lambda (term) (if (same-orderp (car terms) term) term))
+                          terms))
              (polyreduce-inner (cdr terms) (cons (vars (car terms)) seen))))))
 
 (defun make-poly terms
@@ -68,8 +69,10 @@
 
 (defun terms*-inner (terms1 terms2)
   (cond ((null terms1) '())
-        (t (cons (map (lambda (term) (term* (car terms1) term)) terms2)
-                 (terms*-inner (cdr terms1) terms2)))))
+        (t (cons
+             (map (lambda (term) (term* (car terms1) term))
+                  terms2)
+             (terms*-inner (cdr terms1) terms2)))))
 
 (defun make-var (sym pwr)
   (cond ((zerop pwr) '())
