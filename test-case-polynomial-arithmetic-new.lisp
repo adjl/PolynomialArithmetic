@@ -69,8 +69,7 @@
                                                   (1 ()))))))
 
              (test test-same-orderp
-                   ((assert-equal t    (same-orderp '(1 ((x . 1) (y . 1)))
-                                                    '(1 ((x . 1) (y . 1)))))))
+                   ((assert-equal t    (same-orderp '(1 ((x . 1))) '(1 ((x . 1)))))))
 
              (test test-sym->str
                    ((assert-equal "x"  (sym->str 'x))))
