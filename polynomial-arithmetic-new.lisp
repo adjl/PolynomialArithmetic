@@ -37,7 +37,10 @@
   (qsort vars (lambda (var) (sym->str (sym var)))))
 
 (defun make-term (coeff . vars)
-  (list coeff (sort-by-sym vars)))
+  (list coeff (sort-by-sym
+                (cond ((or (null vars) (null (car vars))) '())
+                      ((consp (caar vars)) (car vars))
+                      (t vars)))))
 
 (defun coeff (term) (car term))
 (defun vars (term) (cadr term))
