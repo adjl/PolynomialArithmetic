@@ -43,12 +43,13 @@
   (qsort vars sym->str))
 
 (defun terms* (terms1 terms2)
-  (labels
-    ((terms*-inner (terms1 terms2)
-       (cond ((null terms1) '())
-             (t (cons (map (lambda (term) (term* (car terms1) term)) terms2)
-                      (terms*-inner (cdr terms1) terms2))))))
-    (reduce poly+ (terms*-inner terms1 terms2))))
+  (reduce (lambda (terms1 terms2) (poly+ (make-poly terms1) (make-poly terms2)))
+          (terms*-inner terms1 terms2)))
+
+(defun terms*-inner (terms1 terms2)
+  (cond ((null terms1) '())
+        (t (cons (map (lambda (term) (term* (car terms1) term)) terms2)
+                 (terms*-inner (cdr terms1) terms2)))))
 
 (defun term+ (term1 term2)
   (make-term (+ (coeff term1) (coeff term2)) (vars term1)))
