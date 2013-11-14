@@ -15,12 +15,12 @@
   (equal (vars term1) (vars term2)))
 
 (defun sort-by-order (terms)
-  (qsort (qsort terms term-sym) term-power))
+  (qsort (qsort terms term-sym) term-pwr))
 
 (defun term-sym (term)
   (sym->val (sym (car (vars term)))))
 
-(defun term-power (term)
+(defun term-pwr (term)
   (pwr (car (vars term))))
 
 (defun poly+ (poly1 poly2)
@@ -43,12 +43,12 @@
   (qsort vars sym->val))
 
 (defun terms* (terms1 terms2)
-  (reduce poly+ (terms*-inner terms1 terms2)))
-
-(defun terms*-inner (terms1 terms2)
-  (cond ((null terms1) '())
-        (t (cons (map (lambda (term) (term* (car terms1) term)) terms2)
-                 (terms*-inner (cdr terms1) terms2)))))
+  (labels
+    ((terms*-inner (terms1 terms2)
+       (cond ((null terms1) '())
+             (t (cons (map (lambda (term) (term* (car terms1) term)) terms2)
+                      (terms*-inner (cdr terms1) terms2))))))
+    (reduce poly+ (terms*-inner terms1 terms2))))
 
 (defun term+ (term1 term2)
   (make-term (+ (coeff term1) (coeff term2)) (vars term1)))
