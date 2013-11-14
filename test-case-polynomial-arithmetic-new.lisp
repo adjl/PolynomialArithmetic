@@ -102,4 +102,24 @@
                                                 '((1 ((x . 1) (y . 1)))
                                                   (1 ((x . 1)))
                                                   (1 ()))))))
+
+             (test test-max-sym
+                   ((assert-equal "~"  (max-sym))))
+
+             (test test-max-pwr
+                   ((assert-equal 1024 (max-pwr))))
+
+             (test test-term-sym
+                   ((assert-equal "x"  (term-sym '(1 ((x . 1)))))
+                    (assert-equal "~"  (term-sym '(1 ())))))
+
+             (test test-term-pwr
+                   ((assert-equal 1023    (term-pwr '(1 ((x . 1)))))
+                    (assert-equal 1024 (term-pwr '(1 ())))))
+
+             (test test-sort-by-order
+                   ((assert-equal '() (sort-by-order '()))
+                    (assert-equal '((1 ())) (sort-by-order '((1 ()))))
+                    (assert-equal '((1 ()) (1 ())) (sort-by-order '((1 ()) (1 ()))))
+                    ))
              ))

@@ -1,5 +1,19 @@
 (load "qsort.lisp")
 
+(defun max-sym () "~")
+(defun max-pwr () 1024)
+
+(defun term-sym (term)
+  (if (vars term) (sym->str (sym (car (vars term))))
+    (max-sym)))
+
+(defun term-pwr (term)
+  (- (max-pwr) (if (vars term) (pwr (car (vars term)))
+                 0)))
+
+(defun sort-by-order (terms)
+  (qsort (qsort terms term-sym) term-pwr))
+
 (defun make-poly terms
   (list 'poly (polyreduce (sort-by-order terms))))
 
@@ -13,15 +27,6 @@
 
 (defun same-orderp (term1 term2)
   (equal (vars term1) (vars term2)))
-
-(defun sort-by-order (terms)
-  (qsort (qsort terms term-sym) term-pwr))
-
-(defun term-sym (term)
-  (sym->str (sym (car (vars term)))))
-
-(defun term-pwr (term)
-  (pwr (car (vars term))))
 
 (defun poly+ (poly1 poly2)
   (make-poly (append (terms poly1) (terms poly2))))
