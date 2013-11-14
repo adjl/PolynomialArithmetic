@@ -52,21 +52,17 @@
              (test test-term*
                    ((assert-equal '(2 ((x . 2)))         (term* '(2 ((x . 1)))
                                                                 '(1 ((x . 1)))))
-                    (assert-equal '(2 ((x . 1) (y . 1))) (term* '(2 ((x . 1)))
+                    (assert-equal '(3 ((x . 1) (y . 1))) (term* '(3 ((x . 1)))
                                                                 '(1 ((y . 1)))))))
 
              (test test-terms*-inner
-                   ((assert-equal '() (terms*-inner '()
-                                                    '((1 ((x . 1) (y . 1)))
-                                                      (1 ((x . 1)))
-                                                      (1 ()))))
-                    (assert-equal '(((2 ((x . 2) (y . 2)))
-                                     (2 ((x . 2) (y . 1)))
-                                     (2 ((x . 1) (y . 1)))))
-                                  (terms*-inner '((2 ((x . 1) (y . 1))))
-                                                '((1 ((x . 1) (y . 1)))
-                                                  (1 ((x . 1)))
-                                                  (1 ()))))))
+                   ((assert-equal '()                    (terms*-inner '()
+                                                                       '((2 ((x . 1)))
+                                                                         (3 ((y . 1))))))
+                    (assert-equal '(((2 ((x . 2)))
+                                     (3 ((x . 1) (y . 1)))))
+                                  (terms*-inner '((1 ((x . 1))))
+                                                '((2 ((x . 1))) (3 ((y . 1))))))))
 
              (test termreduce
                    ((assert-equal '(2 ((x . 1))) (termreduce '(1 ((x . 1)))
