@@ -23,35 +23,32 @@
                                   (sort-by-sym '((z . 1) (x . 1) (y . 1))))))
 
              (test test-varreduce
-                   ((assert-equal '() (varreduce '()))
-                    (assert-equal '() (varreduce '(())))
-                    (assert-equal '((x . 1)) (varreduce '((x . 1))))))
+                   ((assert-equal '()                    (varreduce '()))
+                    (assert-equal '()                    (varreduce '(())))
+                    (assert-equal '((x . 1))             (varreduce '((x . 1))))))
 
              (test test-varextract
-                   ((assert-equal '() (varextract '()))
-                    (assert-equal '() (varextract '(())))
-                    (assert-equal '((x . 1)) (varextract '(((x . 1)))))
-                    (assert-equal '((x . 1)) (varextract '((x . 1))))))
+                   ((assert-equal '()                    (varextract '()))
+                    (assert-equal '()                    (varextract '(())))
+                    (assert-equal '((x . 1))             (varextract '(((x . 1)))))
+                    (assert-equal '((x . 1))             (varextract '((x . 1))))))
 
              (test test-make-term
-                   ((assert-equal '() (make-term 0))
-                    (assert-equal '(1 ((x . 1))) (make-term 1 (make-var 'x 1)))))
+                   ((assert-equal '()                    (make-term 0))
+                    (assert-equal '(1 ((x . 1)))         (make-term 1 (make-var 'x 1)))))
 
              (test test-coeff
                    ((assert-equal 1                      (coeff '(1 ())))))
 
              (test test-vars
-                   ((assert-equal '((x . 1) (y . 1))     (vars '(1 ((x . 1) (y . 1)))))))
+                   ((assert-equal '((x . 1))             (vars '(1 ((x . 1)))))))
 
              (test test-term+
-                   ((assert-equal '(2 ())                (term+ '(1 ()) '(1 ())))
-                    (assert-equal '(2 ((x . 1)))         (term+ '(1 ((x . 1)))
-                                                                '(1 ((x . 1)))))
-                    (assert-equal '(2 ((x . 1) (y . 1))) (term+ '(1 ((x . 1) (y . 1)))
-                                                                '(1 ((x . 1) (y . 1)))))))
+                   ((assert-equal '(2 ((x . 1)))         (term+ '(1 ((x . 1)))
+                                                                '(1 ((x . 1)))))))
 
              (test test-term-
-                   ((assert-equal '(-1 ())               (term- '(1 ())))))
+                   ((assert-equal '(-1 ((x . 1)))        (term- '(1 ((x . 1)))))))
 
              (test test-term*
                    ((assert-equal '(2 ())                (term* '(2 ()) '(1 ())))
