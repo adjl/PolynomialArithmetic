@@ -16,10 +16,7 @@
 
 (defun sort-by-order (terms) terms)
 
-(defun make-poly terms
-  (list 'poly (polyreduce (sort-by-order terms))))
-
-(defun terms (poly) (cadr poly))
+(defun same-orderp (term1 term2) (equal (vars term1) (vars term2)))
 
 (defun polyreduce (terms)
   (cond ((null terms) '())
@@ -27,7 +24,10 @@
          (cons (term+ (car terms) (cadr terms)) (polyreduce (cddr terms))))
         (t (cons (car terms) (polyreduce (cdr terms))))))
 
-(defun same-orderp (term1 term2) (equal (vars term1) (vars term2)))
+(defun make-poly terms
+  (list 'poly (polyreduce (sort-by-order terms))))
+
+(defun terms (poly) (cadr poly))
 
 (defun poly+ (poly1 poly2)
   (make-poly (append (terms poly1) (terms poly2))))

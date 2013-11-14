@@ -116,4 +116,8 @@
              (test test-term-pwr
                    ((assert-equal 1023 (term-pwr '(1 ((x . 1)))))
                     (assert-equal 1024 (term-pwr '(1 ())))))
+
+             (test test-same-orderp
+                   ((assert-equal t    (same-orderp '(1 ((x . 1) (y . 1)))
+                                                    '(1 ((x . 1) (y . 1)))))))
              ))
