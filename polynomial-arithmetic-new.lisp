@@ -11,8 +11,10 @@
   (- (max-pwr) (if (vars term) (pwr (car (vars term)))
                  0)))
 
-(defun sort-by-order (terms)
-  (qsort (qsort terms term-sym) term-pwr))
+; (defun sort-by-order (terms)
+;  (qsort (qsort terms term-sym) term-pwr))
+
+(defun sort-by-order (terms) terms)
 
 (defun make-poly terms
   (list 'poly (polyreduce (sort-by-order terms))))
