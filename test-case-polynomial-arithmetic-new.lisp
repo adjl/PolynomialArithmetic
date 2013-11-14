@@ -68,6 +68,13 @@
                                                   (1 ((x . 1)))
                                                   (1 ()))))))
 
+             (test termreduce
+                   ((assert-equal '(2 ((x . 1))) (termreduce '(1 ((x . 1)))
+                                                             '(1 ((x . 1)))))
+                    (assert-equal '(1 ((x . 1))) (termreduce '(1 ((x . 1))) '()))
+                    (assert-equal '(1 ((x . 1))) (termreduce '() '(1 ((x . 1)))))
+                    (assert-equal '() (termreduce '() '()))))
+
              (test test-same-orderp
                    ((assert-equal t    (same-orderp '(1 ((x . 1))) '(1 ((x . 1)))))))
 

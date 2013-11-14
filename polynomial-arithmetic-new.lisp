@@ -2,8 +2,6 @@
 
 (defun sort-by-order (terms) terms)
 
-(defun same-orderp (term1 term2) (equal (vars term1) (vars term2)))
-
 (defun termreduce (term1 term2)
   (cond ((and term1 term2) (term+ term1 term2))
         (t (or term1 term2))))
@@ -20,7 +18,7 @@
              (polyreduce-inner (cdr terms) (cons (vars (car terms)) seen))))))
 
 (defun make-poly terms
-  (list 'poly (polyreduce (sort-by-order terms))))
+  (list 'poly (sort-by-order (polyreduce terms))))
 
 (defun terms (poly) (cadr poly))
 
@@ -88,4 +86,5 @@
         (t (cons (make-var (sym (car vars1)) (+ (pwr (car vars1)) (pwr (car vars2))))
                  (vars* (cdr vars1) (cdr vars2))))))
 
+(defun same-orderp (term1 term2) (equal (vars term1) (vars term2)))
 (defun sym->str (sym) (convert sym <string>))
