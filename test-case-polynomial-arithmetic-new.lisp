@@ -22,6 +22,11 @@
                    ((assert-equal '((x . 1) (y . 1) (z . 1))
                                   (sort-by-sym '((z . 1) (x . 1) (y . 1))))))
 
+             (test test-varreduce
+                   ((assert-equal '() (varreduce '()))
+                    (assert-equal '() (varreduce '(())))
+                    (assert-equal '((x . 1)) (varreduce '((x . 1))))))
+
              (test test-make-term
                    ((assert-equal '(1 ())                (make-term 1))
                     (assert-equal '(1 ((x . 1)))         (make-term 1 (make-var 'x 1)))
