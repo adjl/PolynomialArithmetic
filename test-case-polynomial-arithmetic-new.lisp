@@ -10,9 +10,6 @@
              (test test-pwr
                    ((assert-equal 1                      (pwr '(x . 1)))))
 
-             (test test-sym->str
-                   ((assert-equal "x"                    (sym->str 'x))))
-
              (test test-vars*
                    ((assert-equal '()                    (vars* '() '()))
                     (assert-equal '((x . 1))             (vars* '((x . 1)) '()))
@@ -107,4 +104,7 @@
              (test test-same-orderp
                    ((assert-equal t    (same-orderp '(1 ((x . 1) (y . 1)))
                                                     '(1 ((x . 1) (y . 1)))))))
+
+             (test test-sym->str
+                   ((assert-equal "x"                    (sym->str 'x))))
              ))

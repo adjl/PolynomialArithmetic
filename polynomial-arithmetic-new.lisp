@@ -79,8 +79,6 @@
 (defun sym (var) (car var))
 (defun pwr (var) (cdr var))
 
-(defun sym->str (sym) (convert sym <string>))
-
 (defun vars* (vars1 vars2)
   (cond ((or (null vars1) (null vars2)) (or vars1 vars2))
         ((< (sym->str (sym (car vars1))) (sym->str (sym (car vars2))))
@@ -89,3 +87,5 @@
          (cons (car vars2) (vars* vars1 (cdr vars2))))
         (t (cons (make-var (sym (car vars1)) (+ (pwr (car vars1)) (pwr (car vars2))))
                  (vars* (cdr vars1) (cdr vars2))))))
+
+(defun sym->str (sym) (convert sym <string>))
