@@ -7,7 +7,7 @@
         (t (or term1 term2))))
 
 (defun polyreduce (terms)
-  (reduce termreduce (polyreduce-inner terms '())))
+  (varreduce (polyreduce-inner terms '())))
 
 (defun polyreduce-inner (terms seen)
   (cond ((null terms) '())
@@ -24,7 +24,7 @@
                terms)))
 
 (defun make-poly terms
-  (list 'poly (sort-by-order (polyreduce terms))))
+  (sort-by-order (polyreduce terms)))
 
 (defun terms (poly) (cadr poly))
 

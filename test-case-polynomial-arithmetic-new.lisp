@@ -59,21 +59,15 @@
                    ((assert-equal '()                    (terms*-inner '()
                                                                        '((2 ((x . 1)))
                                                                          (3 ((y . 1))))))
-                    (assert-equal '(((3 ((x . 2)))
-                                     (4 ((x . 1) (y . 1))))
-                                    ((6 ((x . 1) (y . 1)))
-                                     (8 ((y . 2)))))
-                                  (terms*-inner '((1 ((x . 1)))
-                                                  (2 ((y . 1))))
-                                                '((3 ((x . 1)))
-                                                  (4 ((y . 1))))))))
+                    (assert-equal '(((3 ((x . 2)))  (4 ((x . 1) (y . 1))))
+                                    ((6 ((x . 1) (y . 1)))  (8 ((y . 2)))))
+                                  (terms*-inner '((1 ((x . 1)))  (2 ((y . 1))))
+                                                '((3 ((x . 1)))  (4 ((y . 1))))))))
 
              (test test-terms*-inner-inner
-                   ((assert-equal '((2 ((x . 2)))
-                                    (3 ((x . 1) (y . 1))))
+                   ((assert-equal '((2 ((x . 2)))  (3 ((x . 1) (y . 1))))
                                   (terms*-inner-inner '(1 ((x . 1)))
-                                                      '((2 ((x . 1)))
-                                                        (3 ((y . 1))))))))
+                                                      '((2 ((x . 1)))  (3 ((y . 1))))))))
 
              (test test-termreduce
                    ((assert-equal '(2 ((x . 1))) (termreduce '(1 ((x . 1)))
@@ -82,10 +76,28 @@
                     (assert-equal '(1 ((x . 1))) (termreduce '() '(1 ((x . 1)))))
                     (assert-equal '() (termreduce '() '()))))
 
+             (test test-polyreduce
+                   ((assert-equal '((2 ((x . 2)))  (3 ((x . 1)))  (4 ()))
+                                  (polyreduce '((1 ((x . 2)))  (1 ((x . 1)))  (2 ())
+                                                (2 ())  (2 ((x . 1)))  (1 ((x . 2))))))))
+
              (test test-polyreduce-inner
                    ((assert-equal '() (polyreduce-inner '() '()))
                     (assert-equal '() (polyreduce-inner '((1 ((x . 1)))) '(((x . 1)))))
-                    ))
+                    (assert-equal '((2 ((x . 1)))  (3 ()))
+                                  (polyreduce-inner '((1 ((x . 1)))  (1 ())  (2 ())
+                                                      (1 ((x . 1))))
+                                                    '()))))
+
+             (test test-polyreduce-inner-inner
+                   ((assert-equal '(2 ((x . 1))) (polyreduce-inner-inner '((1 ((x . 1)))
+                                                                           (1 ((x . 1)))
+                                                                           (1 ()))))))
+
+             (test test-make-poly
+                   ((assert-equal '((1 ((x . 1)))  (1 ())) (make-poly
+                                                             (make-term 1 (make-var 'x 1))
+                                                             (make-term 1)))))
 
              (test test-reduce
                    ((assert-equal '10 (reduce + '(1 2 3 4)))))
