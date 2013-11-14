@@ -13,11 +13,15 @@
   (cond ((null terms) '())
         ((member (vars (car terms)) seen equal)
          (polyreduce-inner (cdr terms) seen))
-        (t (cons
-             (reduce termreduce
-                     (map (lambda (term) (if (same-orderp (car terms) term) term))
-                          terms))
-             (polyreduce-inner (cdr terms) (cons (vars (car terms)) seen))))))
+        (t (cons (polyreduce-inner-inner terms)
+                 (polyreduce-inner (cdr terms)
+                                   (cons (vars (car terms)) seen))))))
+
+(defun polyreduce-inner-inner (terms)
+  (reduce termreduce
+          (map (lambda (term)
+                 (if (same-orderp (car terms) term) term))
+               terms)))
 
 (defun make-poly terms
   (list 'poly (sort-by-order (polyreduce terms))))
@@ -61,18 +65,21 @@
   (make-term (- (coeff term)) (vars term)))
 
 (defun term* (term1 term2)
-  (make-term (* (coeff term1) (coeff term2)) (vars* (vars term1) (vars term2))))
+  (make-term (* (coeff term1) (coeff term2))
+             (vars* (vars term1) (vars term2))))
 
 (defun terms* (terms1 terms2)
-  (reduce (lambda (terms1 terms2) (poly+ (make-poly terms1) (make-poly terms2)))
+  (reduce (lambda (terms1 terms2)
+            (poly+ (make-poly terms1) (make-poly terms2)))
           (terms*-inner terms1 terms2)))
 
 (defun terms*-inner (terms1 terms2)
   (cond ((null terms1) '())
-        (t (cons
-             (map (lambda (term) (term* (car terms1) term))
-                  terms2)
-             (terms*-inner (cdr terms1) terms2)))))
+        (t (cons (terms*-inner-inner (car terms1) terms2)
+                 (terms*-inner (cdr terms1) terms2)))))
+
+(defun terms*-inner-inner (term terms)
+  (map (lambda (trm) (term* term trm)) terms))
 
 (defun make-var (sym pwr)
   (cond ((zerop pwr) '())
@@ -87,7 +94,8 @@
          (cons (car vars1) (vars* (cdr vars1) vars2)))
         ((> (sym->str (sym (car vars1))) (sym->str (sym (car vars2))))
          (cons (car vars2) (vars* vars1 (cdr vars2))))
-        (t (cons (make-var (sym (car vars1)) (+ (pwr (car vars1)) (pwr (car vars2))))
+        (t (cons (make-var (sym (car vars1))
+                           (+ (pwr (car vars1)) (pwr (car vars2))))
                  (vars* (cdr vars1) (cdr vars2))))))
 
 (defun reduce (fun lst) (accumulate fun (car lst) (cdr lst)))
