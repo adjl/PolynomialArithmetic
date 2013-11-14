@@ -64,17 +64,20 @@
                                   (terms*-inner '((1 ((x . 1))))
                                                 '((2 ((x . 1))) (3 ((y . 1))))))))
 
-             (test termreduce
+             (test test-termreduce
                    ((assert-equal '(2 ((x . 1))) (termreduce '(1 ((x . 1)))
                                                              '(1 ((x . 1)))))
                     (assert-equal '(1 ((x . 1))) (termreduce '(1 ((x . 1))) '()))
                     (assert-equal '(1 ((x . 1))) (termreduce '() '(1 ((x . 1)))))
                     (assert-equal '() (termreduce '() '()))))
 
-             (test polyreduce-inner
+             (test test-polyreduce-inner
                    ((assert-equal '() (polyreduce-inner '() '()))
                     (assert-equal '() (polyreduce-inner '((1 ((x . 1)))) '(((x . 1)))))
                     ))
+
+             (test test-reduce
+                   ((assert-equal '10 (reduce + '(1 2 3 4)))))
 
              (test test-same-orderp
                    ((assert-equal t    (same-orderp '(1 ((x . 1))) '(1 ((x . 1)))))))

@@ -87,5 +87,6 @@
         (t (cons (make-var (sym (car vars1)) (+ (pwr (car vars1)) (pwr (car vars2))))
                  (vars* (cdr vars1) (cdr vars2))))))
 
+(defun reduce (fun lst) (accumulate fun (car lst) (cdr lst)))
 (defun same-orderp (term1 term2) (equal (vars term1) (vars term2)))
 (defun sym->str (sym) (convert sym <string>))
