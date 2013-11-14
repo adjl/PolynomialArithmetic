@@ -26,17 +26,15 @@
 (defun make-poly terms
   (sort-by-order (polyreduce terms)))
 
-(defun terms (poly) (cadr poly))
-
 (defun poly+ (poly1 poly2)
-  (make-poly (append (terms poly1) (terms poly2))))
+  (make-poly (append poly1 poly2)))
 
 (defun poly- (poly1 . poly2)
-  (make-poly (if poly2 (append (terms poly1) (terms (poly- poly2)))
-               (map term- (terms poly1)))))
+  (make-poly (if poly2 (append poly1 (poly- poly2))
+               (map term- poly1))))
 
 (defun poly* (poly1 poly2)
-  (make-poly (terms* (terms poly1) (terms poly2))))
+  (make-poly (terms* poly1 poly2)))
 
 (defun sort-by-sym (vars)
   (qsort vars (lambda (var) (sym->str (sym var)))))
