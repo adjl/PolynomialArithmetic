@@ -24,13 +24,13 @@
                terms)))
 
 (defun make-poly terms
-  (sort-by-order (polyreduce terms)))
+  (sort-by-order (polyreduce (varextract terms))))
 
 (defun poly+ (poly1 poly2)
   (make-poly (append poly1 poly2)))
 
 (defun poly- (poly1 . poly2)
-  (make-poly (if poly2 (append poly1 (poly- poly2))
+  (make-poly (if poly2 (append poly1 (poly- (car poly2)))
                (map term- poly1))))
 
 (defun poly* (poly1 poly2)

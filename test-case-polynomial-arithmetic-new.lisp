@@ -99,6 +99,26 @@
                                                              (make-term 1 (make-var 'x 1))
                                                              (make-term 1)))))
 
+             (test test-poly+
+                   ((assert-equal '((2 ())) (poly+ '((1 ())) '((1 ()))))
+
+                    (assert-equal '((2 ((x . 1)))  (1 ((y . 1))))
+                                  (poly+ '((1 ((x . 1)))  (1 ((y . 1))))
+                                         '((1 ((x . 1))))))))
+
+             (test test-poly-
+                   ((assert-equal '((1 ((x . 1)))  (1 ((y . 1)))  (1 ()))
+                                  (poly- '((2 ((x . 1) (y . 1)))  (2 ((x . 1)))
+                                           (1 ((y . 1)))  (1 ((z . 1)))  (1 ()))
+                                         '((2 ((x . 1) (y . 1)))  (1 ((x . 1)))
+                                           (1 ((z . 1))))))))
+
+             (test test-poly*
+                   ((assert-equal '((1 ((x . 2)))  (1 ((x . 1) (z . 1)))
+                                    (1 ((x . 1) (y . 1)))  (1 ((y . 1) (z . 1))))
+                                  (poly* '((1 ((x . 1)))  (1 ((y . 1))))
+                                         '((1 ((x . 1)))  (1 ((z . 1))))))))
+
              (test test-reduce
                    ((assert-equal '10 (reduce + '(1 2 3 4)))))
 
