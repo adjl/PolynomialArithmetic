@@ -1,28 +1,23 @@
 (load "qsort.lisp")
 
-(defun max-sym () "~")
-(defun max-pwr () 1024)
-
-(defun term-sym (term)
-  (if (vars term) (sym->str (sym (car (vars term))))
-    (max-sym)))
-
-(defun term-pwr (term)
-  (- (max-pwr) (if (vars term) (pwr (car (vars term)))
-                 0)))
-
-; (defun sort-by-order (terms)
-;  (qsort (qsort terms term-sym) term-pwr))
-
 (defun sort-by-order (terms) terms)
 
 (defun same-orderp (term1 term2) (equal (vars term1) (vars term2)))
 
+(defun termreduce (term1 term2)
+  (cond ((and term1 term2) (term+ term1 term2))
+        (t (or term1 term2))))
+
 (defun polyreduce (terms)
+  (reduce termreduce (polyreduce-inner terms '())))
+
+(defun polyreduce-inner (terms seen)
   (cond ((null terms) '())
-        ((same-orderp (car terms) (cadr terms))
-         (cons (term+ (car terms) (cadr terms)) (polyreduce (cddr terms))))
-        (t (cons (car terms) (polyreduce (cdr terms))))))
+        ((member (vars (car terms)) seen) (polyreduce-inner (cdr terms) seen))
+        (t (cons
+             (reduce termreduce
+                     (map (lambda (term) (if (same-orderp (car terms) term) term)) terms))
+             (polyreduce-inner (cdr terms) (cons (vars (car terms)) seen))))))
 
 (defun make-poly terms
   (list 'poly (polyreduce (sort-by-order terms))))
@@ -43,10 +38,11 @@
   (qsort vars (lambda (var) (sym->str (sym var)))))
 
 (defun make-term (coeff . vars)
-  (list coeff (sort-by-sym
-                (cond ((or (null vars) (null (car vars))) '())
-                      ((consp (caar vars)) (car vars))
-                      (t vars)))))
+  (cond ((zerop coeff) '())
+        (t (list coeff (sort-by-sym
+                         (cond ((or (null vars) (null (car vars))) '())
+                               ((consp (caar vars)) (car vars))
+                               (t vars)))))))
 
 (defun coeff (term) (car term))
 (defun vars (term) (cadr term))
@@ -77,8 +73,7 @@
 (defun sym->str (sym) (convert sym <string>))
 
 (defun vars* (vars1 vars2)
-  (cond ((and (null vars1) (null vars2)) '())
-        ((or (null vars1) (null vars2)) (or vars1 vars2))
+  (cond ((or (null vars1) (null vars2)) (or vars1 vars2))
         ((< (sym->str (sym (car vars1))) (sym->str (sym (car vars2))))
          (cons (car vars1) (vars* (cdr vars1) vars2)))
         ((> (sym->str (sym (car vars1))) (sym->str (sym (car vars2))))
