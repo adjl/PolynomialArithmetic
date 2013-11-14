@@ -27,6 +27,12 @@
                     (assert-equal '() (varreduce '(())))
                     (assert-equal '((x . 1)) (varreduce '((x . 1))))))
 
+             (test test-varextract
+                   ((assert-equal '() (varextract '()))
+                    (assert-equal '() (varextract '(())))
+                    (assert-equal '((x . 1)) (varextract '(((x . 1)))))
+                    (assert-equal '((x . 1)) (varextract '((x . 1))))))
+
              (test test-make-term
                    ((assert-equal '(1 ())                (make-term 1))
                     (assert-equal '(1 ((x . 1)))         (make-term 1 (make-var 'x 1)))
