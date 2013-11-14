@@ -37,19 +37,10 @@
   (qsort vars (lambda (var) (sym->str (sym var)))))
 
 (defun make-term (coeff . vars)
-  (list 'term coeff (sort-by-sym vars)))
+  (list coeff (sort-by-sym vars)))
 
-(defun coeff (term) (cadr term))
-(defun vars (term) (caddr term))
-
-(defun terms* (terms1 terms2)
-  (reduce (lambda (terms1 terms2) (poly+ (make-poly terms1) (make-poly terms2)))
-          (terms*-inner terms1 terms2)))
-
-(defun terms*-inner (terms1 terms2)
-  (cond ((null terms1) '())
-        (t (cons (map (lambda (term) (term* (car terms1) term)) terms2)
-                 (terms*-inner (cdr terms1) terms2)))))
+(defun coeff (term) (car term))
+(defun vars (term) (cadr term))
 
 (defun term+ (term1 term2)
   (make-term (+ (coeff term1) (coeff term2)) (vars term1)))
@@ -59,6 +50,15 @@
 
 (defun term* (term1 term2)
   (make-term (* (coeff term1) (coeff term2)) (vars* (vars term1) (vars term2))))
+
+(defun terms* (terms1 terms2)
+  (reduce (lambda (terms1 terms2) (poly+ (make-poly terms1) (make-poly terms2)))
+          (terms*-inner terms1 terms2)))
+
+(defun terms*-inner (terms1 terms2)
+  (cond ((null terms1) '())
+        (t (cons (map (lambda (term) (term* (car terms1) term)) terms2)
+                 (terms*-inner (cdr terms1) terms2)))))
 
 (defun make-var (sym pwr)
   (cons sym pwr))
