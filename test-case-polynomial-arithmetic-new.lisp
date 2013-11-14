@@ -1,7 +1,8 @@
 (test-case 'test-case-polynomial-arithmetic-new
            '(
              (test test-make-var
-                   ((assert-equal '(x . 1)               (make-var 'x 1))))
+                   ((assert-equal '()                    (make-var 'x 0))
+                    (assert-equal '(x . 1)               (make-var 'x 1))))
 
              (test test-sym
                    ((assert-equal 'x                     (sym '(x . 1)))))

@@ -65,7 +65,9 @@
         (t (cons (map (lambda (term) (term* (car terms1) term)) terms2)
                  (terms*-inner (cdr terms1) terms2)))))
 
-(defun make-var (sym pwr) (cons sym pwr))
+(defun make-var (sym pwr)
+  (cond ((zerop pwr) '())
+        (t (cons sym pwr))))
 
 (defun sym (var) (car var))
 (defun pwr (var) (cdr var))
