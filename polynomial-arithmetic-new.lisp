@@ -33,14 +33,14 @@
 (defun poly* (poly1 poly2)
   (make-poly (terms* (terms poly1) (terms poly2))))
 
+(defun sort-by-sym (vars)
+  (qsort vars (lambda (var) (sym->str (sym var)))))
+
 (defun make-term (coeff . vars)
   (list 'term coeff (sort-by-sym vars)))
 
 (defun coeff (term) (cadr term))
 (defun vars (term) (caddr term))
-
-(defun sort-by-sym (vars)
-  (qsort vars sym->str))
 
 (defun terms* (terms1 terms2)
   (reduce (lambda (terms1 terms2) (poly+ (make-poly terms1) (make-poly terms2)))
