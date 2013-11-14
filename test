@@ -1,8 +1,8 @@
 #!/u/u1/masrjb/bin/euscheme -fq
 
 (load "unit-test.lisp")
-(load "polynomial-arithmetic-new.lisp")
+(load "polynomial-arithmetic.lisp")
 
 (test-suite
-  '("test-case-polynomial-arithmetic-new.lisp"
+  '("test-case-polynomial-arithmetic.lisp"
     "test-case-qsort.lisp"))
