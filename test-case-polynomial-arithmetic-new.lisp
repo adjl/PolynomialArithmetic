@@ -34,10 +34,8 @@
                     (assert-equal '((x . 1)) (varextract '((x . 1))))))
 
              (test test-make-term
-                   ((assert-equal '(1 ())                (make-term 1))
-                    (assert-equal '(1 ((x . 1)))         (make-term 1 (make-var 'x 1)))
-                    (assert-equal '(1 ((x . 1) (y . 1))) (make-term 1 (make-var 'x 1)
-                                                                      (make-var 'y 1)))))
+                   ((assert-equal '() (make-term 0))
+                    (assert-equal '(1 ((x . 1))) (make-term 1 (make-var 'x 1)))))
 
              (test test-coeff
                    ((assert-equal 1                      (coeff '(1 ())))))
