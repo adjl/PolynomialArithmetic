@@ -106,5 +106,5 @@
                                                     '(1 ((x . 1) (y . 1)))))))
 
              (test test-sym->str
-                   ((assert-equal "x"                    (sym->str 'x))))
+                   ((assert-equal "x"  (sym->str 'x))))
              ))
