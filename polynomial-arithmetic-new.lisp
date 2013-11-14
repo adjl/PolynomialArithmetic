@@ -11,7 +11,8 @@
 
 (defun polyreduce-inner (terms seen)
   (cond ((null terms) '())
-        ((member (vars (car terms)) seen) (polyreduce-inner (cdr terms) seen))
+        ((member (vars (car terms)) seen equal)
+         (polyreduce-inner (cdr terms) seen))
         (t (cons
              (reduce termreduce
                      (map (lambda (term) (if (same-orderp (car terms) term) term)) terms))

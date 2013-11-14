@@ -71,6 +71,11 @@
                     (assert-equal '(1 ((x . 1))) (termreduce '() '(1 ((x . 1)))))
                     (assert-equal '() (termreduce '() '()))))
 
+             (test polyreduce-inner
+                   ((assert-equal '() (polyreduce-inner '() '()))
+                    (assert-equal '() (polyreduce-inner '((1 ((x . 1)))) '(((x . 1)))))
+                    ))
+
              (test test-same-orderp
                    ((assert-equal t    (same-orderp '(1 ((x . 1))) '(1 ((x . 1)))))))
 
