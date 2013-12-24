@@ -70,7 +70,7 @@
 
 (defun token-simplify (attr)
   (lambda (token)
-    (if (zerop (attr token)) nil val)))
+    (if (zerop (attr token)) nil token)))
 
 (defun make-poly (terms)
   (polyreduce (filter id terms)))
