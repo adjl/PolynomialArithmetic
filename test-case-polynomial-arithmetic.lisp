@@ -8,4 +8,7 @@
       test-var-simplify
       ((assert-equal '()       (var-simplify '(x . 0)))
        (assert-equal '(x . 1)  (var-simplify '(x . 1)))))
+    (test
+      test-sym
+      ((assert-equal 'x  (sym (make-var 'x 1)))))
     ))
