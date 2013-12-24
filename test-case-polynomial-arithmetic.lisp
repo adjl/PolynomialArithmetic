@@ -11,4 +11,7 @@
     (test
       test-sym
       ((assert-equal 'x  (sym (make-var 'x 1)))))
+    (test
+      test-pwr
+      ((assert-equal 1  (pwr (make-var 'x 1)))))
     ))
