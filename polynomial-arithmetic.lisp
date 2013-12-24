@@ -39,8 +39,8 @@
 (defun polyreduce (poly)
   ((tokenreduce term+ equal-order) poly))
 
-(defun varreduce (vars)
-  ((tokenreduce var* equal-sym) vars))
+(defun varreduce (variables)
+  ((tokenreduce var* equal-sym) variables))
 
 (defun equal-order (fun term)
   ((equal-token vars) fun term))
@@ -65,11 +65,11 @@
 (defun make-poly (terms)
   (polyreduce (filter id terms)))
 
-(defun make-term (coefficient vars)
-  (simplify coeff (cons coefficient (filter id vars))))
+(defun make-term (coefficient variables)
+  (simplify coeff (cons coefficient (filter id variables))))
 
-(defun make-var (sym power)
-  (simplify pow (cons sym power)))
+(defun make-var (symbol power)
+  (simplify pow (cons symbol power)))
 
 (defun coeff (term) (car term))
 (defun vars (term) (cdr term))
