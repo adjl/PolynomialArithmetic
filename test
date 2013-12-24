@@ -4,5 +4,4 @@
 (load "polynomial-arithmetic.lisp")
 
 (test-suite
-  '("test-case-polynomial-arithmetic.lisp"
-    "test-case-qsort.lisp"))
+  '("test-case-polynomial-arithmetic.lisp"))
