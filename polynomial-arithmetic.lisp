@@ -34,7 +34,7 @@
 
 (defun var* (var1 var2)
   (make-var (sym var1)
-            (+ (pow var1) (pow var2))))
+            (+ (pwr var1) (pwr var2))))
 
 (defun polyreduce (poly)
   ((tokenreduce term+ equal-order) poly))
@@ -66,7 +66,7 @@
   ((token-simplify coeff) term))
 
 (defun var-simplify (variable)
-  ((token-simplify pow) variable))
+  ((token-simplify pwr) variable))
 
 (defun token-simplify (attr)
   (lambda (token)
@@ -84,7 +84,7 @@
 (defun coeff (term) (car term))
 (defun vars (term) (cdr term))
 (defun sym (var) (car var))
-(defun pow (var) (cdr var))
+(defun pwr (var) (cdr var))
 
 (defun id (val) val)
 
