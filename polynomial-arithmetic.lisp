@@ -1,101 +1,91 @@
-(load "qsort.lisp")
-
-(defun sort-by-order (terms) terms)
-
-(defun termreduce (term1 term2)
-  (cond ((and term1 term2) (term+ term1 term2))
-        (t (or term1 term2))))
-
-(defun polyreduce (terms)
-  (varreduce (polyreduce-inner terms '())))
-
-(defun polyreduce-inner (terms seen)
-  (cond ((null terms) '())
-        ((member (vars (car terms)) seen equal)
-         (polyreduce-inner (cdr terms) seen))
-        (t (cons (polyreduce-inner-inner terms)
-                 (polyreduce-inner (cdr terms)
-                                   (cons (vars (car terms)) seen))))))
-
-(defun polyreduce-inner-inner (terms)
-  (reduce termreduce
-          (map (lambda (term)
-                 (if (same-orderp (car terms) term) term))
-               terms)))
-
-(defun make-poly terms
-  (sort-by-order (polyreduce (varextract terms))))
-
 (defun poly+ (poly1 poly2)
-  (make-poly (append poly1 poly2)))
+  (polyreduce (append poly1 poly2)))
 
-(defun poly- (poly1 . poly2)
-  (make-poly (if poly2 (append poly1 (poly- (car poly2)))
-               (map term- poly1))))
+(defun poly- (poly1 poly2)
+  (polyreduce (append poly1 (polynegate poly2))))
 
 (defun poly* (poly1 poly2)
-  (make-poly (terms* poly1 poly2)))
+  (reduce poly+ (terms* poly1 poly2)))
 
-(defun sort-by-sym (vars)
-  (qsort vars (lambda (var) (sym->str (sym var)))))
+(defun polynegate (poly)
+  (map termnegate poly))
 
-(defun varreduce (vars)
-  (cond ((null vars) '())
-        ((null (car vars)) (varreduce (cdr vars)))
-        (t (cons (car vars) (varreduce (cdr vars))))))
+(defun terms* (poly1 poly2)
+  (if poly2 (cons (map (term*-out (car poly2)) poly1)
+                  (terms* poly1 (cdr poly2)))
+    nil))
 
-(defun varextract (vars)
-  (cond ((or (null vars) (null (car vars))) '())
-        ((consp (caar vars)) (car vars))
-        (t vars)))
+(defun term*-out (term1)
+  (lambda (term2) (term* term1 term2)))
 
-(defun make-term (coeff . vars)
-  (cond ((zerop coeff) '())
-        (t (list coeff (sort-by-sym (varreduce (varextract vars)))))))
-
-(defun coeff (term) (car term))
-(defun vars (term) (cadr term))
+(defun vars* (vars1 vars2)
+  (varsreduce (append vars1 vars2)))
 
 (defun term+ (term1 term2)
-  (make-term (+ (coeff term1) (coeff term2)) (vars term1)))
-
-(defun term- (term)
-  (make-term (- (coeff term)) (vars term)))
+  (make-term (+ (coeff term1) (coeff term2))
+             (vars term1)))
 
 (defun term* (term1 term2)
   (make-term (* (coeff term1) (coeff term2))
              (vars* (vars term1) (vars term2))))
 
-(defun terms* (terms1 terms2)
-  (reduce (lambda (terms1 terms2)
-            (poly+ (make-poly terms1) (make-poly terms2)))
-          (terms*-inner terms1 terms2)))
+(defun termnegate (term)
+  (make-term (- (coeff term)) (vars term)))
 
-(defun terms*-inner (terms1 terms2)
-  (cond ((null terms1) '())
-        (t (cons (terms*-inner-inner (car terms1) terms2)
-                 (terms*-inner (cdr terms1) terms2)))))
+(defun var* (var1 var2)
+  (make-var (sym var1)
+            (+ (pow var1) (pow var2))))
 
-(defun terms*-inner-inner (term terms)
-  (map (lambda (trm) (term* term trm)) terms))
+(defun polyreduce (poly)
+  ((tokenreduce term+ equal-order) poly))
 
-(defun make-var (sym pwr)
-  (cond ((zerop pwr) '())
-        (t (cons sym pwr))))
+(defun varreduce (vars)
+  ((tokenreduce var* equal-sym) vars))
 
+(defun equal-order (fun term)
+  ((equal-token vars) fun term))
+
+(defun equal-sym (fun var)
+  ((equal-token sym) fun var))
+
+(defun tokenreduce (reduce-fun equal-fun)
+  (lambda (tokens)
+    (if tokens
+      (cons (reduce reduce-fun
+                    (filter (equal-fun id (car tokens)) tokens))
+            ((tokenreduce reduce-fun equal-fun)
+             (filter (equal-fun not (car tokens)) (cdr tokens))))
+      nil)))
+
+(defun equal-token (attr)
+  (lambda (fun token1)
+    (lambda (token2)
+      (fun (equal (attr token1) (attr token2))))))
+
+(defun make-poly (terms)
+  (polyreduce (filter id terms)))
+
+(defun make-term (coefficient vars)
+  (simplify coeff (cons coefficient (filter id vars))))
+
+(defun make-var (sym power)
+  (simplify pow (cons sym power)))
+
+(defun coeff (term) (car term))
+(defun vars (term) (cdr term))
 (defun sym (var) (car var))
-(defun pwr (var) (cdr var))
+(defun pow (var) (cdr var))
 
-(defun vars* (vars1 vars2)
-  (cond ((or (null vars1) (null vars2)) (or vars1 vars2))
-        ((< (sym->str (sym (car vars1))) (sym->str (sym (car vars2))))
-         (cons (car vars1) (vars* (cdr vars1) vars2)))
-        ((> (sym->str (sym (car vars1))) (sym->str (sym (car vars2))))
-         (cons (car vars2) (vars* vars1 (cdr vars2))))
-        (t (cons (make-var (sym (car vars1))
-                           (+ (pwr (car vars1)) (pwr (car vars2))))
-                 (vars* (cdr vars1) (cdr vars2))))))
+(defun simplify (fun val)
+  (if (zerop (fun val)) nil val))
 
-(defun reduce (fun lst) (accumulate fun (car lst) (cdr lst)))
-(defun same-orderp (term1 term2) (equal (vars term1) (vars term2)))
-(defun sym->str (sym) (convert sym <string>))
+(defun id (val) val)
+
+(defun reduce (fun lst)
+  (accumulate fun (car lst) (cdr lst)))
+
+(defun filter (fun lst)
+  (cond ((null lst) nil)
+        ((fun (car lst))
+         (cons (car lst) (filter fun (cdr lst))))
+        (t (filter fun (cdr lst)))))
