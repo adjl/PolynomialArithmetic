@@ -19,7 +19,7 @@
   (lambda (term2) (term* term1 term2)))
 
 (defun vars* (vars1 vars2)
-  (varsreduce (append vars1 vars2)))
+  (varreduce (append vars1 vars2)))
 
 (defun term+ (term1 term2)
   (make-term (+ (coeff term1) (coeff term2))
@@ -62,22 +62,29 @@
     (lambda (token2)
       (fun (equal (attr token1) (attr token2))))))
 
+(defun term-simplify (term)
+  ((token-simplify coeff) term))
+
+(defun var-simplify (variable)
+  ((token-simplify pow) variable))
+
+(defun token-simplify (attr)
+  (lambda (token)
+    (if (zerop (attr token)) nil val)))
+
 (defun make-poly (terms)
   (polyreduce (filter id terms)))
 
 (defun make-term (coefficient variables)
-  (simplify coeff (cons coefficient (filter id variables))))
+  (term-simplify (cons coefficient (filter id variables))))
 
 (defun make-var (symbol power)
-  (simplify pow (cons symbol power)))
+  (var-simplify (cons symbol power)))
 
 (defun coeff (term) (car term))
 (defun vars (term) (cdr term))
 (defun sym (var) (car var))
 (defun pow (var) (cdr var))
-
-(defun simplify (fun val)
-  (if (zerop (fun val)) nil val))
 
 (defun id (val) val)
 
