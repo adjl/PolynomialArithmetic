@@ -21,7 +21,13 @@
        (assert-equal '(1 ())         (make-term 1 '()))
        (assert-equal '(2 ((x . 1)))  (make-term 2 '((make-var 'x 1))))
        (assert-equal '(3 ((x . 2)))  (make-term 3 '((make-var 'x 2))))
-       (assert-equal
-         '(4 ((x . 1) (y . 1)))
-         (make-term 4 '((make-var 'x 1) (make-var 'y 1))))))
+       (assert-equal '(4 ((x . 1) (y . 1)))
+                     (make-term 4 '((make-var 'x 1) (make-var 'y 1))))))
+    (test
+      test-make-varlist
+      ((assert-equal '()         (make-varlist '()))
+       (assert-equal '(())       (make-varlist '((make-var 'x 0))))
+       (assert-equal '((x . 1))  (make-varlist '((make-var 'x 1))))
+       (assert-equal '((x . 1) (y . 1))
+                     (make-varlist '((make-var 'x 1) (make-var 'y 1))))))
     ))
