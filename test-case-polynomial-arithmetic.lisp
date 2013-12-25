@@ -118,4 +118,12 @@
                             (make-term 1 '((make-var 'x 1) (make-var 'y 1)))))
        ; Add more tests...
        ))
+    (test
+      test-varreduce
+      ((assert-equal '()  (varreduce '()))
+       (assert-equal '((x . 1))  (varreduce '((x . 1))))
+       (assert-equal '((x . 2))  (varreduce '((x . 1) (x . 1))))
+       (assert-equal '((x . 1) (y . 1))  (varreduce '((x . 1) (y . 1))))
+       ; Add more tests...
+       ))
     ))
