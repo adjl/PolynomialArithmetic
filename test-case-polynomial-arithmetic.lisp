@@ -91,4 +91,8 @@
        (assert-equal '()  ((equal-sym id (make-var 'x 1)) (make-var 'y 1)))
        (assert-equal '()  ((equal-sym not (make-var 'x 1)) (make-var 'x 2)))))
     ; Add test-equal-order
+    (test
+      test-var*
+      ((assert-equal '(x . 2)  (var* (make-var 'x 1) (make-var 'x 1)))
+       (assert-equal '(x . 3)  (var* (make-var 'x 2) (make-var 'x 1)))))
     ))
