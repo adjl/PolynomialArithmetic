@@ -40,4 +40,14 @@
     (test
       test-vars
       ((assert-equal '((x . 1))  (vars (make-term 1 '((make-var 'x 1)))))))
+    (test
+      test-make-termlist
+      ((assert-equal '()  (make-termlist '()))
+       (assert-equal '(())
+                     (make-termlist '((make-term 0 '((make-var 'x 1))))))
+       (assert-equal '((1 ((x . 1))))
+                     (make-termlist '((make-term 1 '((make-var 'x 1))))))
+       (assert-equal '((1 ((x . 1) (y . 1))))
+                     (make-termlist '((make-term 1 '((make-var 'x 1)
+                                                     (make-var 'y 1))))))))
     ))
