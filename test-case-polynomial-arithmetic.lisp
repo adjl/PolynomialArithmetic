@@ -37,4 +37,7 @@
     (test
       test-coeff
       ((assert-equal 1  (coeff (make-term 1 '((make-var 'x 1)))))))
+    (test
+      test-vars
+      ((assert-equal '((x . 1))  (vars (make-term 1 '((make-var 'x 1)))))))
     ))
