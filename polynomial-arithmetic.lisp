@@ -30,7 +30,7 @@
   (lambda (term2) (term* term1 term2)))
 
 (defun termnegate (term)
-  (make-term (- (coeff term)) (vars term)))
+  (cons (- (coeff term)) (list (vars term))))
 
 (defun var* (var1 var2)
   (make-var (sym var1)
