@@ -15,9 +15,6 @@
                   (termlist* poly1 (cdr poly2)))
     nil))
 
-(defun term*-out (term1)
-  (lambda (term2) (term* term1 term2)))
-
 (defun varlist* (vars1 vars2)
   (varreduce (append vars1 vars2)))
 
@@ -28,6 +25,9 @@
 (defun term* (term1 term2)
   (make-term (* (coeff term1) (coeff term2))
              (varlist* (vars term1) (vars term2))))
+
+(defun term*-out (term1)
+  (lambda (term2) (term* term1 term2)))
 
 (defun termnegate (term)
   (make-term (- (coeff term)) (vars term)))
@@ -42,12 +42,6 @@
 (defun varreduce (variables)
   ((tokenreduce var* equal-sym) variables))
 
-(defun equal-order (fun term)
-  ((equal-token vars) fun term))
-
-(defun equal-sym (fun var)
-  ((equal-token sym) fun var))
-
 (defun tokenreduce (reduce-fun equal-fun)
   (lambda (tokens)
     (if tokens
@@ -56,6 +50,12 @@
             ((tokenreduce reduce-fun equal-fun)
              (filter (equal-fun not (car tokens)) (cdr tokens))))
       nil)))
+
+(defun equal-order (fun term)
+  ((equal-token vars) fun term))
+
+(defun equal-sym (fun var)
+  ((equal-token sym) fun var))
 
 (defun equal-token (attr)
   (lambda (fun token1)
