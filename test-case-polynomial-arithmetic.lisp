@@ -108,7 +108,7 @@
        (assert-equal '(x . 3)  (var* (make-var 'x 2) (make-var 'x 1)))))
     (test
       test-term+
-      ((assert-equal '(2 ())  (term+ (make-term 1 '()) (make-term 1 '())))
+      ((assert-equal '(2 ())         (term+ (make-term 1 '()) (make-term 1 '())))
        (assert-equal '(2 ((x . 1)))  (term+ (make-term 1 '((make-var 'x 1)))
                                             (make-term 1 '((make-var 'x 1)))))
        (assert-equal '(2 ((x . 2)))  (term+ (make-term 1 '((make-var 'x 2)))
@@ -120,10 +120,21 @@
        ))
     (test
       test-varreduce
-      ((assert-equal '()  (varreduce '()))
+      ((assert-equal '()         (varreduce '()))
        (assert-equal '((x . 1))  (varreduce '((x . 1))))
        (assert-equal '((x . 2))  (varreduce '((x . 1) (x . 1))))
-       (assert-equal '((x . 1) (y . 1))  (varreduce '((x . 1) (y . 1))))
+       (assert-equal '((x . 1) (y . 1))
+                     (varreduce '((x . 1) (y . 1))))
+       ; Add more tests...
+       ))
+    (test
+      test-polyreduce
+      ((assert-equal '()               (polyreduce '()))
+       (assert-equal '((1 ((x . 1))))  (polyreduce '((1 ((x . 1))))))
+       (assert-equal '((2 ((x . 1))))  (polyreduce '((1 ((x . 1)))
+                                                     (1 ((x . 1))))))
+       (assert-equal '((1 ((x . 1))) (1 ((y . 1))))
+                     (polyreduce '((1 ((x . 1))) (1 ((y . 1))))))
        ; Add more tests...
        ))
     ))
