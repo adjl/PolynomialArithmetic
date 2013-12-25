@@ -3,7 +3,8 @@
   '((test
       test-make-var
       ((assert-equal '()       (make-var 'x 0))
-       (assert-equal '(x . 1)  (make-var 'x 1))))
+       (assert-equal '(x . 1)  (make-var 'x 1))
+       (assert-equal '(x . 2)  (make-var 'x 2))))
     (test
       test-var-simplify
       ((assert-equal '()       (var-simplify '(x . 0)))
@@ -14,4 +15,13 @@
     (test
       test-pwr
       ((assert-equal 1  (pwr (make-var 'x 1)))))
+    (test
+      test-make-term
+      ((assert-equal '()             (make-term 0 '()))
+       (assert-equal '(1 ())         (make-term 1 '()))
+       (assert-equal '(2 ((x . 1)))  (make-term 2 '((make-var 'x 1))))
+       (assert-equal '(3 ((x . 2)))  (make-term 3 '((make-var 'x 2))))
+       (assert-equal
+         '(4 ((x . 1) (y . 1)))
+         (make-term 4 '((make-var 'x 1) (make-var 'y 1))))))
     ))
