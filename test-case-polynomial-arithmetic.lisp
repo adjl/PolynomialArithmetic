@@ -106,4 +106,16 @@
       test-var*
       ((assert-equal '(x . 2)  (var* (make-var 'x 1) (make-var 'x 1)))
        (assert-equal '(x . 3)  (var* (make-var 'x 2) (make-var 'x 1)))))
+    (test
+      test-term+
+      ((assert-equal '(2 ())  (term+ (make-term 1 '()) (make-term 1 '())))
+       (assert-equal '(2 ((x . 1)))  (term+ (make-term 1 '((make-var 'x 1)))
+                                            (make-term 1 '((make-var 'x 1)))))
+       (assert-equal '(2 ((x . 2)))  (term+ (make-term 1 '((make-var 'x 2)))
+                                            (make-term 1 '((make-var 'x 2)))))
+       (assert-equal '(2 ((x . 1) (y . 1)))
+                     (term+ (make-term 1 '((make-var 'x 1) (make-var 'y 1)))
+                            (make-term 1 '((make-var 'x 1) (make-var 'y 1)))))
+       ; Add more tests...
+       ))
     ))
