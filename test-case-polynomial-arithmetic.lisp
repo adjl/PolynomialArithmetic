@@ -215,4 +215,17 @@
                          '((make-term 1 '((make-var 'y 1)))
                            (make-term 1 '())))))
        ))
+    (test
+      test-polynegate
+      ((assert-equal '((-2 ((x . 1))) (-1 ((y . 1))))
+                     (polynegate
+                       (make-poly
+                         '((make-term 2 '((make-var 'x 1)))
+                           (make-term 1 '((make-var 'y 1)))))))
+       (assert-equal '((2 ((x . 1))) (1 ((y . 1))))
+                     (polynegate
+                       (make-poly
+                         '((make-term -2 '((make-var 'x 1)))
+                           (make-term -1 '((make-var 'y 1)))))))
+       ))
     ))
