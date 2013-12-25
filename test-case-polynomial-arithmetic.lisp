@@ -33,13 +33,17 @@
     (test
       test-term-simplify
       ((assert-equal '()             (term-simplify '(0 ((x . 1)))))
-       (assert-equal '(1 ((x . 1)))  (term-simplify '(1 ((x . 1)))))))
+       (assert-equal '(1 ((x . 1)))  (term-simplify '(1 ((x . 1)))))
+       ; Add more tests...
+       ))
     (test
       test-coeff
       ((assert-equal 1  (coeff (make-term 1 '((make-var 'x 1)))))))
     (test
       test-vars
-      ((assert-equal '((x . 1))  (vars (make-term 1 '((make-var 'x 1)))))))
+      ((assert-equal '((x . 1))  (vars (make-term 1 '((make-var 'x 1)))))
+       ; Add more tests...
+       ))
     (test
       test-make-termlist
       ((assert-equal '()  (make-termlist '()))
@@ -49,7 +53,9 @@
                      (make-termlist '((make-term 1 '((make-var 'x 1))))))
        (assert-equal '((1 ((x . 1) (y . 1))))
                      (make-termlist '((make-term 1 '((make-var 'x 1)
-                                                     (make-var 'y 1))))))))
+                                                     (make-var 'y 1))))))
+       ; Add more tests...
+       ))
     (test
       test-make-poly
       ((assert-equal '()
@@ -76,7 +82,7 @@
        (assert-equal '((5 ((x . 1))) (2 ((y . 1))))
                      (make-poly '((make-term 5 '((make-var 'x 1)))
                                   (make-term 2 '((make-var 'y 1))))))
-       ; Add more asserts...
+       ; Add more tests...
        ))
     (test
       test-equal-sym
@@ -84,4 +90,5 @@
        (assert-equal t    ((equal-sym not (make-var 'x 1)) (make-var 'y 1)))
        (assert-equal '()  ((equal-sym id (make-var 'x 1)) (make-var 'y 1)))
        (assert-equal '()  ((equal-sym not (make-var 'x 1)) (make-var 'x 2)))))
+    ; Add test-equal-order
     ))
