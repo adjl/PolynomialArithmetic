@@ -23,8 +23,8 @@
         (list (vars term1))))
 
 (defun term* (term1 term2)
-  (make-term (* (coeff term1) (coeff term2))
-             (varlist* (vars term1) (vars term2))))
+  (cons (* (coeff term1) (coeff term2))
+        (list (varlist* (vars term1) (vars term2)))))
 
 (defun term*-out (term1)
   (lambda (term2) (term* term1 term2)))
