@@ -78,4 +78,10 @@
                                   (make-term 2 '((make-var 'y 1))))))
        ; Add more asserts...
        ))
+    (test
+      test-equal-sym
+      ((assert-equal t    ((equal-sym id (make-var 'x 1)) (make-var 'x 2)))
+       (assert-equal t    ((equal-sym not (make-var 'x 1)) (make-var 'y 1)))
+       (assert-equal '()  ((equal-sym id (make-var 'x 1)) (make-var 'y 1)))
+       (assert-equal '()  ((equal-sym not (make-var 'x 1)) (make-var 'x 2)))))
     ))
