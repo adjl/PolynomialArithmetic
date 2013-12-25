@@ -5,20 +5,20 @@
   (polyreduce (append poly1 (polynegate poly2))))
 
 (defun poly* (poly1 poly2)
-  (reduce poly+ (terms* poly1 poly2)))
+  (reduce poly+ (termlist* poly1 poly2)))
 
 (defun polynegate (poly)
   (map termnegate poly))
 
-(defun terms* (poly1 poly2)
+(defun termlist* (poly1 poly2)
   (if poly2 (cons (map (term*-out (car poly2)) poly1)
-                  (terms* poly1 (cdr poly2)))
+                  (termlist* poly1 (cdr poly2)))
     nil))
 
 (defun term*-out (term1)
   (lambda (term2) (term* term1 term2)))
 
-(defun vars* (vars1 vars2)
+(defun varlist* (vars1 vars2)
   (varreduce (append vars1 vars2)))
 
 (defun term+ (term1 term2)
@@ -27,7 +27,7 @@
 
 (defun term* (term1 term2)
   (make-term (* (coeff term1) (coeff term2))
-             (vars* (vars term1) (vars term2))))
+             (varlist* (vars term1) (vars term2))))
 
 (defun termnegate (term)
   (make-term (- (coeff term)) (vars term)))
@@ -72,11 +72,17 @@
   (lambda (token)
     (if (zerop (attr token)) nil token)))
 
+(defun make-varlist (variables)
+  (if variables (cons (eval (car variables))
+                      (make-varlist (cdr variables)))
+    nil))
+
 (defun make-poly (terms)
   (polyreduce (filter id terms)))
 
 (defun make-term (coefficient variables)
-  (term-simplify (cons coefficient (filter id variables))))
+  (term-simplify (cons coefficient
+                       (list (filter id (make-varlist variables))))))
 
 (defun make-var (symbol power)
   (var-simplify (cons symbol power)))
