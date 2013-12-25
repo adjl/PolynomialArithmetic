@@ -150,4 +150,10 @@
                             (make-term 2 '((make-var 'y 1)))))
        ; Add more tests...
        ))
+    (test
+      test-termnegate
+      ((assert-equal '(-1 ((x . 1)))  (termnegate (make-term 1 '((make-var 'x 1)))))
+       (assert-equal '(1  ((x . 1)))  (termnegate (make-term -1 '((make-var 'x 1)))))
+       ; Add more tests...
+       ))
     ))
