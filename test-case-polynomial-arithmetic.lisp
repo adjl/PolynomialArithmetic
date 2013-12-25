@@ -151,11 +151,6 @@
                             (make-term 2 '((make-var 'y 1)))))
        ))
     (test
-      test-termnegate
-      ((assert-equal '(-1 ((x . 1)))  (termnegate (make-term 1 '((make-var 'x 1)))))
-       (assert-equal '(1  ((x . 1)))  (termnegate (make-term -1 '((make-var 'x 1)))))
-       ))
-    (test
       test-term*-out
       ((assert-equal '(1 ((x . 1)))  ((term*-out (make-term 1 '()))
                                       (make-term 1 '((make-var 'x 1)))))
@@ -164,8 +159,13 @@
        (assert-equal '(3 ((x . 2)))  ((term*-out (make-term 3 '((make-var 'x 1))))
                                       (make-term 1 '((make-var 'x 1)))))
        (assert-equal '(4 ((x . 1) (y . 1)))
-                     ((term*-out (make-term 2 '((make-var 'x 1))))
-                                 (make-term 2 '((make-var 'y 1)))))
+                     ((term*-out (make-term 2 '((make-var 'y 1))))
+                                 (make-term 2 '((make-var 'x 1)))))
+       ))
+    (test
+      test-termnegate
+      ((assert-equal '(-1 ((x . 1)))  (termnegate (make-term 1 '((make-var 'x 1)))))
+       (assert-equal '(1  ((x . 1)))  (termnegate (make-term -1 '((make-var 'x 1)))))
        ))
     (test
       test-varlist*
@@ -174,5 +174,45 @@
        (assert-equal '((x . 2))  (varlist* '((x . 1)) '((x . 1))))
        (assert-equal '((x . 1) (y . 1))
                      (varlist* '((x . 1)) '((y . 1))))
+       ))
+    (test
+      test-termlist*
+      ((assert-equal '(((1 ((x . 1))) (1 ())))
+                     (termlist*
+                       (make-poly
+                         '((make-term 1 '((make-var 'x 1)))
+                           (make-term 1 '())))
+                       (make-poly
+                         '((make-term 1 '())))))
+       (assert-equal '(((2 ((x . 1))) (2 ())))
+                     (termlist*
+                       (make-poly
+                         '((make-term 1 '((make-var 'x 1)))
+                           (make-term 1 '())))
+                       (make-poly
+                         '((make-term 2 '())))))
+       (assert-equal '(((1 ((x . 2))) (1 ((x . 1)))))
+                     (termlist*
+                       (make-poly
+                         '((make-term 1 '((make-var 'x 1)))
+                           (make-term 1 '())))
+                       (make-poly
+                         '((make-term 1 '((make-var 'x 1)))))))
+       (assert-equal '(((1 ((x . 1) (y . 1))) (1 ((y . 1)))))
+                     (termlist*
+                       (make-poly
+                         '((make-term 1 '((make-var 'x 1)))
+                           (make-term 1 '())))
+                       (make-poly
+                         '((make-term 1 '((make-var 'y 1)))))))
+       (assert-equal '(((1 ((x . 1) (y . 1))) (1 ((y . 1))))
+                       ((1 ((x . 1))) (1 ())))
+                     (termlist*
+                       (make-poly
+                         '((make-term 1 '((make-var 'x 1)))
+                           (make-term 1 '())))
+                       (make-poly
+                         '((make-term 1 '((make-var 'y 1)))
+                           (make-term 1 '())))))
        ))
     ))
