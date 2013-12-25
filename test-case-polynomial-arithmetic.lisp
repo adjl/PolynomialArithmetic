@@ -167,4 +167,12 @@
                      ((term*-out (make-term 2 '((make-var 'x 1))))
                                  (make-term 2 '((make-var 'y 1)))))
        ))
+    (test
+      test-varlist*
+      ((assert-equal '()         (varlist* '() '()))
+       (assert-equal '((x . 1))  (varlist* '((x . 1)) '()))
+       (assert-equal '((x . 2))  (varlist* '((x . 1)) '((x . 1))))
+       (assert-equal '((x . 1) (y . 1))
+                     (varlist* '((x . 1)) '((y . 1))))
+       ))
     ))
