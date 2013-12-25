@@ -87,10 +87,21 @@
     (test
       test-equal-sym
       ((assert-equal t    ((equal-sym id (make-var 'x 1)) (make-var 'x 2)))
-       (assert-equal t    ((equal-sym not (make-var 'x 1)) (make-var 'y 1)))
-       (assert-equal '()  ((equal-sym id (make-var 'x 1)) (make-var 'y 1)))
-       (assert-equal '()  ((equal-sym not (make-var 'x 1)) (make-var 'x 2)))))
-    ; Add test-equal-order
+       (assert-equal '()  ((equal-sym id (make-var 'x 1)) (make-var 'y 1)))))
+    (test
+      test-equal-order
+      ((assert-equal t    ((equal-order id (make-term 1 '()))
+                           (make-term 2 '())))
+       (assert-equal t    ((equal-order id (make-term 1 '((make-var 'x 1))))
+                           (make-term 2 '((make-var 'x 1)))))
+       (assert-equal t    ((equal-order id (make-term 1 '((make-var 'x 2))))
+                           (make-term 2 '((make-var 'x 2)))))
+       (assert-equal t    ((equal-order id (make-term 1 '((make-var 'x 1)
+                                                          (make-var 'y 1))))
+                           (make-term 2 '((make-var 'x 1)
+                                          (make-var 'y 1)))))
+       ; Add more tests...
+       ))
     (test
       test-var*
       ((assert-equal '(x . 2)  (var* (make-var 'x 1) (make-var 'x 1)))
