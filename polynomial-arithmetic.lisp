@@ -88,7 +88,7 @@
   (var-simplify (cons symbol power)))
 
 (defun coeff (term) (car term))
-(defun vars (term) (cdr term))
+(defun vars (term) (cadr term))
 (defun sym (var) (car var))
 (defun pwr (var) (cdr var))
 
