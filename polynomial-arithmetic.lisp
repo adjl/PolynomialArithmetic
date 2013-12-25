@@ -72,13 +72,19 @@
   (lambda (token)
     (if (zerop (attr token)) nil token)))
 
+(defun make-termlist (terms)
+  (make-tokenlist terms))
+
 (defun make-varlist (variables)
-  (if variables (cons (eval (car variables))
-                      (make-varlist (cdr variables)))
+  (make-tokenlist variables))
+
+(defun make-tokenlist (tokens)
+  (if tokens (cons (eval (car tokens))
+                   (make-tokenlist (cdr tokens)))
     nil))
 
 (defun make-poly (terms)
-  (polyreduce (filter id terms)))
+  (polyreduce (filter id (make-termlist terms))))
 
 (defun make-term (coefficient variables)
   (term-simplify (cons coefficient
