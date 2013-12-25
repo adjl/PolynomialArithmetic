@@ -22,8 +22,8 @@
   (varreduce (append vars1 vars2)))
 
 (defun term+ (term1 term2)
-  (make-term (+ (coeff term1) (coeff term2))
-             (vars term1)))
+  (cons (+ (coeff term1) (coeff term2))
+        (list (vars term1))))
 
 (defun term* (term1 term2)
   (make-term (* (coeff term1) (coeff term2))
