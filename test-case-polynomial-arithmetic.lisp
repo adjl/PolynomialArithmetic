@@ -30,4 +30,8 @@
        (assert-equal '((x . 1))  (make-varlist '((make-var 'x 1))))
        (assert-equal '((x . 1) (y . 1))
                      (make-varlist '((make-var 'x 1) (make-var 'y 1))))))
+    (test
+      test-term-simplify
+      ((assert-equal '()             (term-simplify '(0 ((x . 1)))))
+       (assert-equal '(1 ((x . 1)))  (term-simplify '(1 ((x . 1)))))))
     ))
