@@ -26,8 +26,8 @@
   (cons (* (coeff term1) (coeff term2))
         (list (varlist* (vars term1) (vars term2)))))
 
-(defun term*-out (term1)
-  (lambda (term2) (term* term1 term2)))
+(defun term*-out (term2)
+  (lambda (term1) (term* term1 term2)))
 
 (defun termnegate (term)
   (cons (- (coeff term)) (list (vars term))))
