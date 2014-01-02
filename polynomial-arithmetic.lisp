@@ -26,17 +26,17 @@
 ; Add two terms
 ;; Only used with terms of the same order
 (defun term+ (term1 term2)
-  (cons (+ (coeff term1) (coeff term2))
-        (list (vars term1))))
+  (make-term-internal (+ (coeff term1) (coeff term2))
+                      (vars term1)))
 
 ; Multiply two terms
 (defun term* (term1 term2)
-  (cons (* (coeff term1) (coeff term2))
-        (list (varlist* (vars term1) (vars term2)))))
+  (make-term-internal (* (coeff term1) (coeff term2))
+                      (varlist* (vars term1) (vars term2))))
 
 ; Negate a term
 (defun termnegate (term)
-  (cons (- (coeff term)) (list (vars term))))
+  (make-term-internal (- (coeff term)) (vars term)))
 
 (defun term*-out (term2)
   (lambda (term1) (term* term1 term2)))
@@ -85,16 +85,16 @@
       (fun (equal (attr token1) (attr token2))))))
 
 ; Simplify term
-;; Return an empty list if it evaluates to zero
-(defun term-simplify (term)
-  ((token-simplify coeff) term))
+;; Return an empty list if it simplifies to zero
+(defun termsimplify (term)
+  ((tokensimplify coeff) term))
 
 ; Simplify variable
-;; Return an empty list if it evaluates to one
-(defun var-simplify (variable)
-  ((token-simplify pwr) variable))
+;; Return an empty list if it simplifies to one
+(defun varsimplify (variable)
+  ((tokensimplify pwr) variable))
 
-(defun token-simplify (attr)
+(defun tokensimplify (attr)
   (lambda (token)
     (if (zerop (attr token)) nil token)))
 
@@ -113,11 +113,18 @@
   (polyreduce (filter id (make-termlist terms))))
 
 (defun make-term (coefficient variables)
-  (term-simplify (cons coefficient
-                       (list (filter id (make-varlist variables))))))
+  ((make-term-lambda make-varlist) coefficient variables))
+
+(defun make-term-internal (coefficient variables)
+  ((make-term-lambda id) coefficient variables))
+
+(defun make-term-lambda (fun)
+  (lambda (coefficient variables)
+    (termsimplify (cons coefficient
+                         (list (filter id (fun variables)))))))
 
 (defun make-var (symbol power)
-  (var-simplify (cons symbol power)))
+  (varsimplify (cons symbol power)))
 
 (defun coeff (term) (car term)) ; Term coefficient
 (defun vars (term) (cadr term)) ; Term variable list

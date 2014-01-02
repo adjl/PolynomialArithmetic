@@ -7,9 +7,9 @@
        (assert-equal '(x . 2)  (make-var 'x 2))
        ))
     (test
-      test-var-simplify
-      ((assert-equal '()       (var-simplify '(x . 0)))
-       (assert-equal '(x . 1)  (var-simplify '(x . 1)))
+      test-varsimplify
+      ((assert-equal '()       (varsimplify '(x . 0)))
+       (assert-equal '(x . 1)  (varsimplify '(x . 1)))
        ))
     (test
       test-sym
@@ -37,9 +37,9 @@
                      (make-term 4 '((make-var 'x 1) (make-var 'y 1))))
        ))
     (test
-      test-term-simplify
-      ((assert-equal '()             (term-simplify '(0 ((x . 1)))))
-       (assert-equal '(1 ((x . 1)))  (term-simplify '(1 ((x . 1)))))
+      test-termsimplify
+      ((assert-equal '()             (termsimplify '(0 ((x . 1)))))
+       (assert-equal '(1 ((x . 1)))  (termsimplify '(1 ((x . 1)))))
        ))
     (test
       test-coeff
