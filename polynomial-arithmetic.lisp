@@ -55,7 +55,7 @@
 ; Simplify polynomial
 ;; Add terms of the same order
 (defun polyreduce (poly)
-  ((tokenreduce term+ equal-order) poly))
+  ((tokenreduce term+ equal-order) (filter id poly)))
 
 ; Simplify variable list
 ;; Multiply variables with the same symbol
@@ -114,7 +114,7 @@
     nil))
 
 (defun make-poly (terms)
-  (polyreduce (filter id (make-termlist terms))))
+  (polyreduce (make-termlist terms)))
 
 (defun make-term (coefficient variables)
   ((make-term-lambda make-varlist) coefficient variables))
