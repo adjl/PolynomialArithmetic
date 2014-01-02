@@ -47,16 +47,18 @@
   (varreduce (append vars1 vars2)))
 
 ; Multiply two variables
-; Only used with variables with the same symbol
+;; Only used with variables with the same symbol
 (defun var* (var1 var2)
   (make-var (sym var1)
             (+ (pwr var1) (pwr var2))))
 
-; Simplify polynomial by adding terms of the same order
+; Simplify polynomial
+;; Add terms of the same order
 (defun polyreduce (poly)
   ((tokenreduce term+ equal-order) poly))
 
-; Multiply variables with the same symbol
+; Simplify variable list
+;; Multiply terms with the same symbol
 (defun varreduce (variables)
   ((tokenreduce var* equal-sym) variables))
 
@@ -69,13 +71,11 @@
              (filter (equal-fun not (car tokens)) (cdr tokens))))
       nil)))
 
-; Return whether two terms
-; are of the same order
+; Whether two terms are of the same order
 (defun equal-order (fun term)
   ((equal-token vars) fun term))
 
-; Return whether two variables
-; have the same symbol
+; Whether two variables have the same symbol
 (defun equal-sym (fun var)
   ((equal-token sym) fun var))
 
@@ -84,13 +84,13 @@
     (lambda (token2)
       (fun (equal (attr token1) (attr token2))))))
 
-; Return an empty list if the term
-; evaluates to zero
+; Simplify term
+;; Return an empty list if it evaluates to zero
 (defun term-simplify (term)
   ((token-simplify coeff) term))
 
-; Return an empty list of the variable
-; evaluates to one (i.e. power is zero)
+; Simplify variable
+;; Return an empty list if it evaluates to one
 (defun var-simplify (variable)
   ((token-simplify pwr) variable))
 
@@ -98,11 +98,9 @@
   (lambda (token)
     (if (zerop (attr token)) nil token)))
 
-; Construct the terms of a polynomial
 (defun make-termlist (terms)
   (make-tokenlist terms))
 
-; Construct the variables of a term
 (defun make-varlist (variables)
   (make-tokenlist variables))
 
@@ -111,25 +109,22 @@
                    (make-tokenlist (cdr tokens)))
     nil))
 
-; Construct a polynomial and simplify
 (defun make-poly (terms)
   (polyreduce (filter id (make-termlist terms))))
 
-; Construct a term
 (defun make-term (coefficient variables)
   (term-simplify (cons coefficient
                        (list (filter id (make-varlist variables))))))
 
-; Construct a variable
 (defun make-var (symbol power)
   (var-simplify (cons symbol power)))
 
 (defun coeff (term) (car term)) ; Term coefficient
-(defun vars (term) (cadr term)) ; Term variables
+(defun vars (term) (cadr term)) ; Term variable list
 (defun sym (var) (car var)) ; Variable symbol
 (defun pwr (var) (cdr var)) ; Variable power
 
-(defun id (val) val) ; Identity function
+(defun id (val) val) ; Identity
 
 (defun reduce (fun lst)
   (accumulate fun (car lst) (cdr lst)))
