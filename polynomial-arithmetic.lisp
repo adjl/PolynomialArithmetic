@@ -1,65 +1,58 @@
-; Append the second polynomial to the first
-; and simplify (i.e. collect like terms)
+; Add two polynomials
+;; Append them and add terms of the same order
 (defun poly+ (poly1 poly2)
   (polyreduce (append poly1 poly2)))
 
-; Negate the second polynomial and add
+; Subtract a polynomial by another
 (defun poly- (poly1 poly2)
-  (polyreduce (append poly1 (polynegate poly2))))
+  (poly+ poly1 (polynegate poly2)))
 
-; Multiply the first polynomial by each term
-; in the second and add the resulting
-; polynomials together
+; Multiply two polynomials
+;; Multiply out one by the other and add the resulting polynomials
 (defun poly* (poly1 poly2)
   (reduce poly+ (termlist* poly1 poly2)))
 
-; Negate each term
+; Negate a polynomial
 (defun polynegate (poly)
   (map termnegate poly))
 
-; Multiply all of the terms in the first
-; polynomial by each term in the second
-;
-; Used when multiplying polynomials together
+; Multiply out a polynomial by another
+;; Multiply the first by each term in the second
 (defun termlist* (poly1 poly2)
   (if poly2 (cons (map (term*-out (car poly2)) poly1)
                   (termlist* poly1 (cdr poly2)))
     nil))
 
-; Append the second variable list to the first
-; and simplify (i.e. combine variables)
-;
-; Used when multiplying terms together
-(defun varlist* (vars1 vars2)
-  (varreduce (append vars1 vars2)))
-
-; Add the coefficients together
-; and use the same variable list
-;
-; Only used with like terms
+; Add two terms
+;; Only used with terms of the same order
 (defun term+ (term1 term2)
   (cons (+ (coeff term1) (coeff term2))
         (list (vars term1))))
 
-; Multiply the coefficients
-; and the variables together
+; Multiply two terms
 (defun term* (term1 term2)
   (cons (* (coeff term1) (coeff term2))
         (list (varlist* (vars term1) (vars term2)))))
 
-(defun term*-out (term2)
-  (lambda (term1) (term* term1 term2)))
-
-; Negate the coefficient
+; Negate a term
 (defun termnegate (term)
   (cons (- (coeff term)) (list (vars term))))
 
-; Add the powers together
+(defun term*-out (term2)
+  (lambda (term1) (term* term1 term2)))
+
+; Multiply two variable lists
+;; Append them and multiply variables with the same symbol
+(defun varlist* (vars1 vars2)
+  (varreduce (append vars1 vars2)))
+
+; Multiply two variables
+; Only used with variables with the same symbol
 (defun var* (var1 var2)
   (make-var (sym var1)
             (+ (pwr var1) (pwr var2))))
 
-; Add terms of the same order
+; Simplify polynomial by adding terms of the same order
 (defun polyreduce (poly)
   ((tokenreduce term+ equal-order) poly))
 
@@ -118,7 +111,7 @@
                    (make-tokenlist (cdr tokens)))
     nil))
 
-; Construct a polynomial
+; Construct a polynomial and simplify
 (defun make-poly (terms)
   (polyreduce (filter id (make-termlist terms))))
 
