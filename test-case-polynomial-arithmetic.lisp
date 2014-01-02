@@ -1,32 +1,6 @@
 (test-case
   'test-case-polynomial-arithmetic
-  '((test
-      test-make-var
-      ((assert-equal '()       (make-var 'x 0))
-       (assert-equal '(x . 1)  (make-var 'x 1))
-       (assert-equal '(x . 2)  (make-var 'x 2))
-       ))
-    (test
-      test-varsimplify
-      ((assert-equal '()       (varsimplify '(x . 0)))
-       (assert-equal '(x . 1)  (varsimplify '(x . 1)))
-       ))
-    (test
-      test-sym
-      ((assert-equal 'x  (sym (make-var 'x 1)))
-       ))
-    (test
-      test-pwr
-      ((assert-equal 1  (pwr (make-var 'x 1)))
-       ))
-    (test
-      test-make-varlist
-      ((assert-equal '()         (make-varlist '()))
-       (assert-equal '(())       (make-varlist '((make-var 'x 0))))
-       (assert-equal '((x . 1))  (make-varlist '((make-var 'x 1))))
-       (assert-equal '((x . 1) (y . 1))
-                     (make-varlist '((make-var 'x 1) (make-var 'y 1))))
-       ))
+  '(
     (test
       test-make-term
       ((assert-equal '()             (make-term 0 '()))
@@ -48,17 +22,6 @@
     (test
       test-vars
       ((assert-equal '((x . 1))  (vars (make-term 1 '((make-var 'x 1)))))
-       ))
-    (test
-      test-make-termlist
-      ((assert-equal '()  (make-termlist '()))
-       (assert-equal '(())
-                     (make-termlist '((make-term 0 '((make-var 'x 1))))))
-       (assert-equal '((1 ((x . 1))))
-                     (make-termlist '((make-term 1 '((make-var 'x 1))))))
-       (assert-equal '((1 ((x . 1) (y . 1))))
-                     (make-termlist '((make-term 1 '((make-var 'x 1)
-                                                     (make-var 'y 1))))))
        ))
     (test
       test-make-poly
@@ -88,11 +51,6 @@
                                   (make-term 2 '((make-var 'y 1))))))
        ))
     (test
-      test-equal-symp
-      ((assert-equal t    ((equal-symp id (make-var 'x 1)) (make-var 'x 2)))
-       (assert-equal '()  ((equal-symp id (make-var 'x 1)) (make-var 'y 1)))
-       ))
-    (test
       test-equal-orderp
       ((assert-equal t    ((equal-orderp id (make-term 1 '()))
                            (make-term 2 '())))
@@ -106,11 +64,6 @@
                                           (make-var 'y 1)))))
        ))
     (test
-      test-var*
-      ((assert-equal '(x . 2)  (var* (make-var 'x 1) (make-var 'x 1)))
-       (assert-equal '(x . 3)  (var* (make-var 'x 2) (make-var 'x 1)))
-       ))
-    (test
       test-term+
       ((assert-equal '(2 ())         (term+ (make-term 1 '()) (make-term 1 '())))
        (assert-equal '(2 ((x . 1)))  (term+ (make-term 1 '((make-var 'x 1)))
@@ -120,14 +73,6 @@
        (assert-equal '(2 ((x . 1) (y . 1)))
                      (term+ (make-term 1 '((make-var 'x 1) (make-var 'y 1)))
                             (make-term 1 '((make-var 'x 1) (make-var 'y 1)))))
-       ))
-    (test
-      test-varreduce
-      ((assert-equal '()         (varreduce '()))
-       (assert-equal '((x . 1))  (varreduce '((x . 1))))
-       (assert-equal '((x . 2))  (varreduce '((x . 1) (x . 1))))
-       (assert-equal '((x . 1) (y . 1))
-                     (varreduce '((x . 1) (y . 1))))
        ))
     (test
       test-polyreduce
@@ -166,14 +111,6 @@
       test-termnegate
       ((assert-equal '(-1 ((x . 1)))  (termnegate (make-term 1 '((make-var 'x 1)))))
        (assert-equal '(1  ((x . 1)))  (termnegate (make-term -1 '((make-var 'x 1)))))
-       ))
-    (test
-      test-varlist*
-      ((assert-equal '()         (varlist* '() '()))
-       (assert-equal '((x . 1))  (varlist* '((x . 1)) '()))
-       (assert-equal '((x . 2))  (varlist* '((x . 1)) '((x . 1))))
-       (assert-equal '((x . 1) (y . 1))
-                     (varlist* '((x . 1)) '((y . 1))))
        ))
     (test
       test-termlist*
