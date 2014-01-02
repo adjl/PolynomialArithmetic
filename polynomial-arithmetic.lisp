@@ -23,6 +23,9 @@
                   (termlist* poly1 (cdr poly2)))
     nil))
 
+(defun term*-out (term2)
+  (lambda (term1) (term* term1 term2)))
+
 ; Add two terms
 ;; Only used with terms of the same order
 (defun term+ (term1 term2)
@@ -37,9 +40,6 @@
 ; Negate a term
 (defun termnegate (term)
   (make-term-internal (- (coeff term)) (vars term)))
-
-(defun term*-out (term2)
-  (lambda (term1) (term* term1 term2)))
 
 ; Multiply two variable lists
 ;; Append them and multiply variables with the same symbol
@@ -58,7 +58,7 @@
   ((tokenreduce term+ equal-order) poly))
 
 ; Simplify variable list
-;; Multiply terms with the same symbol
+;; Multiply variables with the same symbol
 (defun varreduce (variables)
   ((tokenreduce var* equal-sym) variables))
 
@@ -98,9 +98,13 @@
   (lambda (token)
     (if (zerop (attr token)) nil token)))
 
+; Construct term list
+;; Evals each make-term
 (defun make-termlist (terms)
   (make-tokenlist terms))
 
+; Construct variable list
+;; Evals each make-var
 (defun make-varlist (variables)
   (make-tokenlist variables))
 
