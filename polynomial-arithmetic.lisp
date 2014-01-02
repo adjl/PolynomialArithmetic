@@ -131,6 +131,5 @@
 
 (defun filter (fun lst)
   (cond ((null lst) nil)
-        ((fun (car lst))
-         (cons (car lst) (filter fun (cdr lst))))
+        ((fun (car lst)) (cons (car lst) (filter fun (cdr lst))))
         (t (filter fun (cdr lst)))))
