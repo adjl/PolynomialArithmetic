@@ -9,7 +9,7 @@
       ((assert-equal nil       (varsimplify '(x . 0))) ; x^0 == 1 == '()
        (assert-equal '(x . 1)  (varsimplify '(x . 1))))) ; x
     (test
-      test-make-var ; Calls varsimplify internally
+      test-make-var ; Call varsimplify internally
       ((assert-equal nil       (make-var 'x 0)) ; x^0 == 1 == '()
        (assert-equal '(x . 1)  (make-var 'x 1)))) ; x
     (test
@@ -28,9 +28,30 @@
        (assert-equal t    ((equal-symp id (make-var 'x 1)) (make-var 'x 1)))
        ; x and y do not have the same symbol
        (assert-equal nil  ((equal-symp id (make-var 'x 1)) (make-var 'y 1)))))
-    ; varsort
     (test
-      test-varreduce ; Simplifies a term's variable list
+      test-varsort ; Sort variable list
+      ((assert-equal nil
+                     (varsort nil))
+       ; x is x sorted
+       (assert-equal (make-varlist '((make-var 'x 1)))
+                     (varsort
+                       (make-varlist '((make-var 'x 1)))))
+       ; xy is yx sorted
+       (assert-equal (make-varlist '((make-var 'x 1)
+                                     (make-var 'y 1)))
+                     (varsort
+                       (make-varlist '((make-var 'y 1)
+                                       (make-var 'x 1)))))
+       ; xyz is zyx sorted
+       (assert-equal (make-varlist '((make-var 'x 1)
+                                     (make-var 'y 1)
+                                     (make-var 'z 1)))
+                     (varsort
+                       (make-varlist '((make-var 'z 1)
+                                       (make-var 'y 1)
+                                       (make-var 'x 1)))))))
+    (test
+      test-varreduce ; Simplify variable list
       (; 1 == 1
        (assert-equal nil
                      (varreduce nil))
@@ -87,7 +108,7 @@
                                        (make-var 'y 1)
                                        (make-var 'z 1)))))))
     (test
-      test-varlist* ; Multiplies two terms' variable lists and simplifies
+      test-varlist* ; Multiply variable lists and simplify
       (; 1 == 1 * 1
        (assert-equal nil
                      (varlist* nil nil))

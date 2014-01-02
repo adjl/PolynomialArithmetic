@@ -1,3 +1,5 @@
+(import "sort")
+
 ; Add two polynomials
 ;; Append them and add terms of the same order
 (defun poly+ (poly1 poly2)
@@ -60,7 +62,7 @@
 ; Simplify variable list
 ;; Multiply variables with the same symbol
 (defun varreduce (variables)
-  ((tokenreduce var* equal-symp) (filter id variables)))
+  (varsort ((tokenreduce var* equal-symp) (filter id variables))))
 
 (defun tokenreduce (reduce-fun equal-funp)
   (lambda (tokens)
@@ -71,11 +73,21 @@
              (filter (equal-funp not (car tokens)) (cdr tokens))))
       nil)))
 
-; Return whether two terms are of the same order
+; Sort variable list
+;; Sort in lexicographical order
+(defun varsort (variables)
+  (sort variables var<))
+
+; Compare two variables
+;; Check if the first comes before the second in lexicographical order
+(defun var< (var1 var2)
+  (< (sym->str (sym var1)) (sym->str (sym var2))))
+
+; Check if two terms are of the same order
 (defun equal-orderp (fun term)
   ((equal-tokenp vars) fun term))
 
-; Return whether two variables have the same symbol
+; Check if two variables have the same symbol
 (defun equal-symp (fun var)
   ((equal-tokenp sym) fun var))
 
@@ -138,6 +150,11 @@
 (defun vars (term) (cadr term)) ; Term variable list
 (defun sym (var) (car var)) ; Variable symbol
 (defun pwr (var) (cdr var)) ; Variable power
+
+; Convert symbol to string
+;; To compare by ASCII value
+(defun sym->str (symbol)
+  (convert symbol <string>))
 
 (defun id (val) val) ; Identity
 
