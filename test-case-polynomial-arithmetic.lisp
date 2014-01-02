@@ -88,19 +88,19 @@
                                   (make-term 2 '((make-var 'y 1))))))
        ))
     (test
-      test-equal-sym
-      ((assert-equal t    ((equal-sym id (make-var 'x 1)) (make-var 'x 2)))
-       (assert-equal '()  ((equal-sym id (make-var 'x 1)) (make-var 'y 1)))
+      test-equal-symp
+      ((assert-equal t    ((equal-symp id (make-var 'x 1)) (make-var 'x 2)))
+       (assert-equal '()  ((equal-symp id (make-var 'x 1)) (make-var 'y 1)))
        ))
     (test
-      test-equal-order
-      ((assert-equal t    ((equal-order id (make-term 1 '()))
+      test-equal-orderp
+      ((assert-equal t    ((equal-orderp id (make-term 1 '()))
                            (make-term 2 '())))
-       (assert-equal t    ((equal-order id (make-term 1 '((make-var 'x 1))))
+       (assert-equal t    ((equal-orderp id (make-term 1 '((make-var 'x 1))))
                            (make-term 2 '((make-var 'x 1)))))
-       (assert-equal t    ((equal-order id (make-term 1 '((make-var 'x 2))))
+       (assert-equal t    ((equal-orderp id (make-term 1 '((make-var 'x 2))))
                            (make-term 2 '((make-var 'x 2)))))
-       (assert-equal t    ((equal-order id (make-term 1 '((make-var 'x 1)
+       (assert-equal t    ((equal-orderp id (make-term 1 '((make-var 'x 1)
                                                           (make-var 'y 1))))
                            (make-term 2 '((make-var 'x 1)
                                           (make-var 'y 1)))))

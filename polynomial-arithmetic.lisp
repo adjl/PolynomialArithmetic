@@ -55,31 +55,31 @@
 ; Simplify polynomial
 ;; Add terms of the same order
 (defun polyreduce (poly)
-  ((tokenreduce term+ equal-order) (filter id poly)))
+  ((tokenreduce term+ equal-orderp) (filter id poly)))
 
 ; Simplify variable list
 ;; Multiply variables with the same symbol
 (defun varreduce (variables)
-  ((tokenreduce var* equal-sym) variables))
+  ((tokenreduce var* equal-symp) (filter id variables)))
 
-(defun tokenreduce (reduce-fun equal-fun)
+(defun tokenreduce (reduce-fun equal-funp)
   (lambda (tokens)
     (if tokens
       (cons (reduce reduce-fun
-                    (filter (equal-fun id (car tokens)) tokens))
-            ((tokenreduce reduce-fun equal-fun)
-             (filter (equal-fun not (car tokens)) (cdr tokens))))
+                    (filter (equal-funp id (car tokens)) tokens))
+            ((tokenreduce reduce-fun equal-funp)
+             (filter (equal-funp not (car tokens)) (cdr tokens))))
       nil)))
 
-; Whether two terms are of the same order
-(defun equal-order (fun term)
-  ((equal-token vars) fun term))
+; Return whether two terms are of the same order
+(defun equal-orderp (fun term)
+  ((equal-tokenp vars) fun term))
 
-; Whether two variables have the same symbol
-(defun equal-sym (fun var)
-  ((equal-token sym) fun var))
+; Return whether two variables have the same symbol
+(defun equal-symp (fun var)
+  ((equal-tokenp sym) fun var))
 
-(defun equal-token (attr)
+(defun equal-tokenp (attr)
   (lambda (fun token1)
     (lambda (token2)
       (fun (equal (attr token1) (attr token2))))))
@@ -99,12 +99,12 @@
     (if (zerop (attr token)) nil token)))
 
 ; Construct term list
-;; Evals each make-term
+;; Eval each make-term
 (defun make-termlist (terms)
   (make-tokenlist terms))
 
 ; Construct variable list
-;; Evals each make-var
+;; Eval each make-var
 (defun make-varlist (variables)
   (make-tokenlist variables))
 
@@ -113,20 +113,24 @@
                    (make-tokenlist (cdr tokens)))
     nil))
 
+; Construct polynomial
 (defun make-poly (terms)
   (polyreduce (make-termlist terms)))
 
+; Construct term
 (defun make-term (coefficient variables)
   ((make-term-lambda make-varlist) coefficient variables))
 
+; Construct term (internal)
 (defun make-term-internal (coefficient variables)
   ((make-term-lambda id) coefficient variables))
 
 (defun make-term-lambda (fun)
   (lambda (coefficient variables)
     (termsimplify (cons coefficient
-                         (list (filter id (fun variables)))))))
+                         (list (varreduce (fun variables)))))))
 
+; Construct variable
 (defun make-var (symbol power)
   (varsimplify (cons symbol power)))
 
