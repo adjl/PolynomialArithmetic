@@ -56,13 +56,15 @@
 
 ; Simplify term list
 ;; Add terms of the same order
-(defun termreduce (poly)
-  (termsort ((tokenreduce term+ equal-orderp) (filter id poly))))
+(defun termreduce (terms)
+  (termsort (filter id ((tokenreduce term+ equal-orderp)
+                        (filter id terms)))))
 
 ; Simplify variable list
 ;; Multiply variables with the same symbol
-(defun varreduce (variables)
-  (varsort ((tokenreduce var* equal-symp) (filter id variables))))
+(defun varreduce (vars)
+  (varsort (filter id ((tokenreduce var* equal-symp)
+                       (filter id vars)))))
 
 (defun tokenreduce (reduce-fun equal-funp)
   (lambda (tokens)
@@ -78,8 +80,8 @@
   (sort terms termcompare))
 
 ; Sort variable list
-(defun varsort (variables)
-  (sort variables var<))
+(defun varsort (vars)
+  (sort vars var<))
 
 ; Compare two terms in lexicographical order and by variable power
 (defun termcompare (term1 term2)
@@ -123,8 +125,8 @@
 
 ; Simplify variable
 ;; Return an empty list if it simplifies to one
-(defun varsimplify (variable)
-  ((tokensimplify pwr) variable))
+(defun varsimplify (var)
+  ((tokensimplify pwr) var))
 
 (defun tokensimplify (attr)
   (lambda (token)
@@ -137,8 +139,8 @@
 
 ; Construct variable list
 ;; Eval each make-var
-(defun make-varlist (variables)
-  (make-tokenlist variables))
+(defun make-varlist (vars)
+  (make-tokenlist vars))
 
 (defun make-tokenlist (tokens)
   (if tokens (cons (eval (car tokens))
@@ -150,21 +152,21 @@
   (termreduce (make-termlist terms)))
 
 ; Construct term
-(defun make-term (coefficient variables)
-  ((make-term-lambda make-varlist) coefficient variables))
+(defun make-term (coeff vars)
+  ((make-term-lambda make-varlist) coeff vars))
 
 ; Construct term (internal)
-(defun make-term-internal (coefficient variables)
-  ((make-term-lambda id) coefficient variables))
+(defun make-term-internal (coeff vars)
+  ((make-term-lambda id) coeff vars))
 
 (defun make-term-lambda (fun)
-  (lambda (coefficient variables)
-    (termsimplify (cons coefficient
-                         (list (varreduce (fun variables)))))))
+  (lambda (coeff vars)
+    (termsimplify (cons coeff
+                         (list (varreduce (fun vars)))))))
 
 ; Construct variable
-(defun make-var (symbol power)
-  (varsimplify (cons symbol power)))
+(defun make-var (sym pwr)
+  (varsimplify (cons sym pwr)))
 
 (defun coeff (term) (car term)) ; Term coefficient
 (defun vars (term) (cadr term)) ; Term variable list
@@ -173,8 +175,8 @@
 
 ; Convert symbol to string
 ;; To compare by ASCII value
-(defun sym->str (symbol)
-  (convert symbol <string>))
+(defun sym->str (sym)
+  (convert sym <string>))
 
 (defun id (val) val) ; Identity
 
