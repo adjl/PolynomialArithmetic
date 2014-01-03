@@ -1,5 +1,5 @@
 (test-case
-  'test-case-polynomial-arithmetic
+  'test-case-poly
   '((test
       test-make-poly
       ((assert-equal '()
