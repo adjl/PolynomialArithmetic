@@ -175,41 +175,178 @@
                            (make-term 2 '((make-var 'y 1)))))))))
     (test
       test-termlist*
-      ; Multiply the first term list by each term in the second and simplify
-      ((assert-equal '(((1 ((x . 1))) (1 ())))
+      ; Multiply the first term list by each term in the second
+      (; (x + 1) == (x + 1) * (1)
+       (assert-equal (list
+                       (make-termlist
+                         '((make-term 1 '((make-var 'x 1)))
+                           (make-term 1 nil))))
                      (termlist*
-                       (make-poly
+                       (make-termlist
                          '((make-term 1 '((make-var 'x 1)))
                            (make-term 1 nil)))
-                       (make-poly
+                       (make-termlist
                          '((make-term 1 nil)))))
-       (assert-equal '(((2 ((x . 1))) (2 ())))
+       ; (2x + 2) == (x + 1) * (2)
+       (assert-equal (list
+                       (make-termlist
+                         '((make-term 2 '((make-var 'x 1)))
+                           (make-term 2 nil))))
                      (termlist*
-                       (make-poly
+                       (make-termlist
                          '((make-term 1 '((make-var 'x 1)))
                            (make-term 1 nil)))
-                       (make-poly
+                       (make-termlist
                          '((make-term 2 nil)))))
-       (assert-equal '(((1 ((x . 2))) (1 ((x . 1)))))
+       ; (x^2 + x) == (x + 1) * (x)
+       (assert-equal (list
+                       (make-termlist
+                         '((make-term 1 '((make-var 'x 2)))
+                           (make-term 1 '((make-var 'x 1))))))
                      (termlist*
-                       (make-poly
+                       (make-termlist
                          '((make-term 1 '((make-var 'x 1)))
                            (make-term 1 nil)))
-                       (make-poly
+                       (make-termlist
                          '((make-term 1 '((make-var 'x 1)))))))
-       (assert-equal '(((1 ((x . 1) (y . 1))) (1 ((y . 1)))))
+       ; (xy + y) == (x + 1) * (y)
+       (assert-equal (list
+                       (make-termlist
+                         '((make-term 1 '((make-var 'x 1)
+                                          (make-var 'y 1)))
+                           (make-term 1 '((make-var 'y 1))))))
                      (termlist*
-                       (make-poly
+                       (make-termlist
                          '((make-term 1 '((make-var 'x 1)))
                            (make-term 1 nil)))
-                       (make-poly
+                       (make-termlist
                          '((make-term 1 '((make-var 'y 1)))))))
-       (assert-equal '(((1 ((x . 1) (y . 1))) (1 ((y . 1))))
-                       ((1 ((x . 1))) (1 ())))
+       ; (x + y) == (x + y) * (1)
+       (assert-equal (list
+                       (make-termlist
+                         '((make-term 1 '((make-var 'x 1)))
+                           (make-term 1 '((make-var 'y 1))))))
                      (termlist*
-                       (make-poly
+                       (make-termlist
+                         '((make-term 1 '((make-var 'x 1)))
+                           (make-term 1 '((make-var 'y 1)))))
+                       (make-termlist
+                         '((make-term 1 nil)))))
+       ; (2x + 2y) == (x + y) * (2)
+       (assert-equal (list
+                       (make-termlist
+                         '((make-term 2 '((make-var 'x 1)))
+                           (make-term 2 '((make-var 'y 1))))))
+                     (termlist*
+                       (make-termlist
+                         '((make-term 1 '((make-var 'x 1)))
+                           (make-term 1 '((make-var 'y 1)))))
+                       (make-termlist
+                         '((make-term 2 nil)))))
+       ; (x^2 + xy) == (x + y) * (x)
+       (assert-equal (list
+                       (make-termlist
+                         '((make-term 1 '((make-var 'x 2)))
+                           (make-term 1 '((make-var 'x 1)
+                                          (make-var 'y 1))))))
+                     (termlist*
+                       (make-termlist
+                         '((make-term 1 '((make-var 'x 1)))
+                           (make-term 1 '((make-var 'y 1)))))
+                       (make-termlist
+                         '((make-term 1 '((make-var 'x 1)))))))
+       ; (x^2 + x) + (x + 1) == (x + 1) * (x + 1)
+       (assert-equal (list
+                       (make-termlist
+                         '((make-term 1 '((make-var 'x 2)))
+                           (make-term 1 '((make-var 'x 1)))))
+                       (make-termlist
+                         '((make-term 1 '((make-var 'x 1)))
+                           (make-term 1 nil))))
+                     (termlist*
+                       (make-termlist
                          '((make-term 1 '((make-var 'x 1)))
                            (make-term 1 nil)))
-                       (make-poly
-                         '((make-term 1 '((make-var 'y 1)))
-                           (make-term 1 nil)))))))))
+                       (make-termlist
+                         '((make-term 1 '((make-var 'x 1)))
+                           (make-term 1 nil)))))
+       ; (x^2 + x) + (2x + 2) == (x + 1) * (x + 2)
+       (assert-equal (list
+                       (make-termlist
+                         '((make-term 1 '((make-var 'x 2)))
+                           (make-term 1 '((make-var 'x 1)))))
+                       (make-termlist
+                         '((make-term 2 '((make-var 'x 1)))
+                           (make-term 2 nil))))
+                     (termlist*
+                       (make-termlist
+                         '((make-term 1 '((make-var 'x 1)))
+                           (make-term 1 nil)))
+                       (make-termlist
+                         '((make-term 1 '((make-var 'x 1)))
+                           (make-term 2 nil)))))
+       ; (x^2 + x) + (xy + y) == (x + 1) * (x + y)
+       (assert-equal (list
+                       (make-termlist
+                         '((make-term 1 '((make-var 'x 2)))
+                           (make-term 1 '((make-var 'x 1)))))
+                       (make-termlist
+                         '((make-term 1 '((make-var 'x 1)
+                                          (make-var 'y 1)))
+                           (make-term 1 '((make-var 'y 1))))))
+                     (termlist*
+                       (make-termlist
+                         '((make-term 1 '((make-var 'x 1)))
+                           (make-term 1 nil)))
+                       (make-termlist
+                         '((make-term 1 '((make-var 'x 1)))
+                           (make-term 1 '((make-var 'y 1)))))))
+       ; (x^2 + xy) + (x + y) == (x + y) * (x + 1)
+       (assert-equal (list
+                       (make-termlist
+                         '((make-term 1 '((make-var 'x 2)))
+                           (make-term 1 '((make-var 'x 1)
+                                          (make-var 'y 1)))))
+                       (make-termlist
+                         '((make-term 1 '((make-var 'x 1)))
+                           (make-term 1 '((make-var 'y 1))))))
+                     (termlist*
+                       (make-termlist
+                         '((make-term 1 '((make-var 'x 1)))
+                           (make-term 1 '((make-var 'y 1)))))
+                       (make-termlist
+                         '((make-term 1 '((make-var 'x 1)))
+                           (make-term 1 nil)))))
+       ; (x^2 + xy) + (2x + 2y) == (x + y) * (x + 2)
+       (assert-equal (list
+                       (make-termlist
+                         '((make-term 1 '((make-var 'x 2)))
+                           (make-term 1 '((make-var 'x 1)
+                                          (make-var 'y 1)))))
+                       (make-termlist
+                         '((make-term 2 '((make-var 'x 1)))
+                           (make-term 2 '((make-var 'y 1))))))
+                     (termlist*
+                       (make-termlist
+                         '((make-term 1 '((make-var 'x 1)))
+                           (make-term 1 '((make-var 'y 1)))))
+                       (make-termlist
+                         '((make-term 1 '((make-var 'x 1)))
+                           (make-term 2 nil)))))
+       ; (x^2 + xy) + (xy + y^2) == (x + y) * (x + y)
+       (assert-equal (list
+                       (make-termlist
+                         '((make-term 1 '((make-var 'x 2)))
+                           (make-term 1 '((make-var 'x 1)
+                                          (make-var 'y 1)))))
+                       (make-termlist
+                         '((make-term 1 '((make-var 'x 1)
+                                          (make-var 'y 1)))
+                           (make-term 1 '((make-var 'y 2))))))
+                     (termlist*
+                       (make-termlist
+                         '((make-term 1 '((make-var 'x 1)))
+                           (make-term 1 '((make-var 'y 1)))))
+                       (make-termlist
+                         '((make-term 1 '((make-var 'x 1)))
+                           (make-term 1 '((make-var 'y 1)))))))))))
