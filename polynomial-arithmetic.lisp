@@ -75,14 +75,14 @@
 
 ; Sort term list
 (defun termsort (terms)
-  (sort terms term<))
+  (sort terms termcompare))
 
 ; Sort variable list
 (defun varsort (variables)
   (sort variables var<))
 
 ; Compare two terms in lexicographical order and by variable power
-(defun term< (term1 term2)
+(defun termcompare (term1 term2)
   (cond ((null (vars term1)) nil)
         ((null (vars term2)) t)
         ((equal (sym (car (vars term1)))

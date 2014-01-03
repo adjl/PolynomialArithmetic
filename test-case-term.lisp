@@ -152,7 +152,21 @@
                                                    (make-var 'y 1)))
                                     (make-term 1 '((make-var 'x 1)
                                                    (make-var 'y 3)))))))
-    ; test-termcompare
+    (test
+      test-termcompare
+      (; constants come last
+       (assert-equal nil  (termcompare (make-term 1 nil)
+                                       (make-term 1 '((make-var 'x 1)))))
+       ; constants come last
+       (assert-equal t    (termcompare (make-term 1 '((make-var 'x 1)))
+                                       (make-term 1 nil)))
+       ; termsym<
+       (assert-equal nil  (termcompare (make-term 1 '((make-var 'x 1)))
+                                       (make-term 1 '((make-var 'x 1)))))
+       ; termpwr>
+       (assert-equal t    (termcompare (make-term 1 '((make-var 'x 1)))
+                                       (make-term 1 '((make-var 'y 1)))))))
+
     (test
       test-termsort
       ((assert-equal nil
