@@ -181,7 +181,7 @@
 (defun id (val) val) ; Identity
 
 (defun reduce (fun lst)
-  (accumulate fun (car lst) (cdr lst)))
+  (if lst (accumulate fun (car lst) (cdr lst)) nil))
 
 (defun filter (fun lst)
   (cond ((null lst) nil)

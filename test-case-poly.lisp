@@ -188,6 +188,43 @@
                  ; Exceptional use cases are already covered in
                  ; test-make-poly, test-termreduce and
                  ; test-termlist*
-      (
+      (; 0 == 0 * 0
+       (assert-equal nil
+                     (poly* nil nil))
+       ; 0 == 0 * (x + y + 1)
+       (assert-equal nil
+                     (poly*
+                       nil
+                       (make-poly
+                         '((make-term 1 '((make-var 'x 1)))
+                           (make-term 1 '((make-var 'y 1)))
+                           (make-term 1 nil)))))
+       ; 0 == (x + y + 1) * 0
+       (assert-equal nil
+                     (poly*
+                       (make-poly
+                         '((make-term 1 '((make-var 'x 1)))
+                           (make-term 1 '((make-var 'y 1)))
+                           (make-term 1 nil)))
+                       nil))
+       ; x^2 + 2xy + 2x + y^2 + 2y + 1
+       ; == (x + y + 1) * (x + y + 1)
+       (assert-equal (make-poly
+                       '((make-term 1 '((make-var 'x 2)))
+                         (make-term 2 '((make-var 'x 1)
+                                        (make-var 'y 1)))
+                         (make-term 2 '((make-var 'x 1)))
+                         (make-term 1 '((make-var 'y 2)))
+                         (make-term 2 '((make-var 'y 1)))
+                         (make-term 1 nil)))
+                     (poly*
+                       (make-poly
+                         '((make-term 1 '((make-var 'x 1)))
+                           (make-term 1 '((make-var 'y 1)))
+                           (make-term 1 nil)))
+                       (make-poly
+                         '((make-term 1 '((make-var 'x 1)))
+                           (make-term 1 '((make-var 'y 1)))
+                           (make-term 1 nil)))))
        ))
     ))
