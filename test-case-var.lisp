@@ -60,14 +60,14 @@
                                        (make-var 'x 1)))))))
     (test
       test-varreduce ; Simplify variable list
-      (; 1 == 1
+      (; 1
        (assert-equal nil
                      (varreduce nil))
        ; 1 == x^0 == 1
        (assert-equal nil
                      (varreduce
                        (make-varlist '((make-var 'x 0)))))
-       ; x == x
+       ; x
        (assert-equal (make-varlist '((make-var 'x 1)))
                      (varreduce
                        (make-varlist '((make-var 'x 1)))))

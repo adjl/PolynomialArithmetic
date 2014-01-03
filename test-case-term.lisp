@@ -217,21 +217,21 @@
                                           (make-var 'y 1)))))))))
     (test
       test-termreduce ; Simplify term list
-      (; 0 == 0
+      (; 0
        (assert-equal nil
                      (termreduce nil))
-       ; 0 == 0
+       ; 0
        (assert-equal nil
                      (termreduce
                        (make-termlist
                          '((make-term 0 nil)))))
-       ; 1 == 1
+       ; 1
        (assert-equal (make-termlist
                        '((make-term 1 nil)))
                      (termreduce
                        (make-termlist
                          '((make-term 1 nil)))))
-       ; x == x
+       ; x
        (assert-equal (make-termlist
                        '((make-term 1 '((make-var 'x 1)))))
                      (termreduce
