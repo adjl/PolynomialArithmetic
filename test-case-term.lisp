@@ -225,12 +225,6 @@
                      (termreduce
                        (make-termlist
                          '((make-term 0 nil)))))
-       ; 0 == 1 + -1
-       (assert-equal nil
-                     (termreduce
-                       (make-termlist
-                         '((make-term 1 nil)
-                           (make-term -1 nil)))))
        ; 1 == 1
        (assert-equal (make-termlist
                        '((make-term 1 nil)))
