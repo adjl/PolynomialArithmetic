@@ -5,4 +5,5 @@
 
 (test-suite
   '("test-case-polynomial-arithmetic.lisp"
-    "test-case-var.lisp"))
+    "test-case-var.lisp"
+    "test-case-term.lisp"))
