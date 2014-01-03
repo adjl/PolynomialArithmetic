@@ -75,13 +75,13 @@
                             (make-term 1 '((make-var 'x 1) (make-var 'y 1)))))
        ))
     (test
-      test-polyreduce
-      ((assert-equal '()               (polyreduce '()))
-       (assert-equal '((1 ((x . 1))))  (polyreduce '((1 ((x . 1))))))
-       (assert-equal '((2 ((x . 1))))  (polyreduce '((1 ((x . 1)))
+      test-termreduce
+      ((assert-equal '()               (termreduce '()))
+       (assert-equal '((1 ((x . 1))))  (termreduce '((1 ((x . 1))))))
+       (assert-equal '((2 ((x . 1))))  (termreduce '((1 ((x . 1)))
                                                      (1 ((x . 1))))))
        (assert-equal '((1 ((x . 1))) (1 ((y . 1))))
-                     (polyreduce '((1 ((x . 1))) (1 ((y . 1))))))
+                     (termreduce '((1 ((x . 1))) (1 ((y . 1))))))
        ))
     (test
       test-term*

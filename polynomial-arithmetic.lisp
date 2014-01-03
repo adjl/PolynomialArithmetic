@@ -3,7 +3,7 @@
 ; Add two polynomials
 ;; Append them and add terms of the same order
 (defun poly+ (poly1 poly2)
-  (polyreduce (append poly1 poly2)))
+  (termreduce (append poly1 poly2)))
 
 ; Subtract a polynomial by another
 (defun poly- (poly1 poly2)
@@ -54,9 +54,9 @@
   (make-var (sym var1)
             (+ (pwr var1) (pwr var2))))
 
-; Simplify polynomial
+; Simplify term list
 ;; Add terms of the same order
-(defun polyreduce (poly)
+(defun termreduce (poly)
   ((tokenreduce term+ equal-orderp) (filter id poly)))
 
 ; Simplify variable list
@@ -127,7 +127,7 @@
 
 ; Construct polynomial
 (defun make-poly (terms)
-  (polyreduce (make-termlist terms)))
+  (termreduce (make-termlist terms)))
 
 ; Construct term
 (defun make-term (coefficient variables)
