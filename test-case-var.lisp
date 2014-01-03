@@ -29,7 +29,15 @@
        ; x and y do not have the same symbol
        (assert-equal nil  ((equal-symp id (make-var 'x 1)) (make-var 'y 1)))))
     (test
-      test-varsort ; Sort variable list
+      test-var<
+      (; x comes before y
+       (assert-equal t    (var< (make-var 'x 1) (make-var 'y 1)))
+       ; y does not come before x
+       (assert-equal nil  (var< (make-var 'y 1) (make-var 'x 1)))
+       ; x does not come before x
+       (assert-equal nil  (var< (make-var 'x 1) (make-var 'x 1)))))
+    (test
+      test-varsort
       ((assert-equal nil
                      (varsort nil))
        ; x is x sorted

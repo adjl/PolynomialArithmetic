@@ -121,7 +121,40 @@
                            (make-term 5 '((make-var 'x 1)
                                           (make-var 'y 2)))))))
     (test
-      test-termsort ; Sort term list
+      test-termsym<
+      (; x comes before y
+       (assert-equal t    (termsym< (make-term 1 '((make-var 'x 1)))
+                                    (make-term 1 '((make-var 'y 1)))))
+       ; y does not come before x
+       (assert-equal nil  (termsym< (make-term 1 '((make-var 'y 1)))
+                                    (make-term 1 '((make-var 'x 1)))))
+       ; x does not come before x
+       (assert-equal nil  (termsym< (make-term 1 '((make-var 'x 1)))
+                                    (make-term 1 '((make-var 'x 1)))))
+       ; x comes before y
+       (assert-equal t    (termsym< (make-term 1 '((make-var 'x 1)
+                                                   (make-var 'y 1)))
+                                    (make-term 1 '((make-var 'y 1)
+                                                   (make-var 'z 1)))))))
+    (test
+      test-termpwr>
+      (; 2 > 1
+       (assert-equal t    (termpwr> (make-term 1 '((make-var 'x 2)))
+                                    (make-term 1 '((make-var 'x 1)))))
+       ; 1 < 2
+       (assert-equal nil  (termpwr> (make-term 1 '((make-var 'x 1)))
+                                    (make-term 1 '((make-var 'x 2)))))
+       ; 1 does not come before 1
+       (assert-equal nil  (termpwr> (make-term 1 '((make-var 'x 1)))
+                                    (make-term 1 '((make-var 'x 1)))))
+       ; 2 > 1
+       (assert-equal t    (termpwr> (make-term 1 '((make-var 'x 2)
+                                                   (make-var 'y 1)))
+                                    (make-term 1 '((make-var 'x 1)
+                                                   (make-var 'y 3)))))))
+    ; test-termcompare
+    (test
+      test-termsort
       ((assert-equal nil
                      (termsort nil))
        ; 1 is 1 sorted
