@@ -120,7 +120,54 @@
                                                            (make-var 'y 1))))
                            (make-term 5 '((make-var 'x 1)
                                           (make-var 'y 2)))))))
-    ; termsort
+    (test
+      test-termsort ; Sort term list
+      ((assert-equal nil
+                     (termsort nil))
+       ; 1 is 1 sorted
+       (assert-equal (make-termlist
+                       '((make-term 1 nil)))
+                     (termsort
+                       (make-termlist
+                         '((make-term 1 nil)))))
+       ; (x + 1) is (1 + x) sorted
+       (assert-equal (make-termlist
+                       '((make-term 1 '((make-var 'x 1)))
+                         (make-term 1 nil)))
+                     (termsort
+                       (make-termlist
+                         '((make-term 1 nil)
+                           (make-term 1 '((make-var 'x 1)))))))
+       ; (x + y) is (y + x) sorted
+       (assert-equal (make-termlist
+                       '((make-term 1 '((make-var 'x 1)))
+                         (make-term 1 '((make-var 'y 1)))))
+                     (termsort
+                       (make-termlist
+                         '((make-term 1 '((make-var 'y 1)))
+                           (make-term 1 '((make-var 'x 1)))))))
+       ; (x + y + 1) is (1 + y + x) sorted
+       (assert-equal (make-termlist
+                       '((make-term 1 '((make-var 'x 1)))
+                         (make-term 1 '((make-var 'y 1)))
+                         (make-term 1 nil)))
+                     (termsort
+                       (make-termlist
+                         '((make-term 1 nil)
+                           (make-term 1 '((make-var 'y 1)))
+                           (make-term 1 '((make-var 'x 1)))))))
+       ; (x^2 + xy + y^2) is (y^2 + x^2 + xy) sorted
+       (assert-equal (make-termlist
+                       '((make-term 1 '((make-var 'x 2)))
+                         (make-term 1 '((make-var 'x 1)
+                                        (make-var 'y 1)))
+                         (make-term 1 '((make-var 'y 2)))))
+                     (termsort
+                       (make-termlist
+                         '((make-term 1 '((make-var 'y 2)))
+                           (make-term 1 '((make-var 'x 2)))
+                           (make-term 1 '((make-var 'x 1)
+                                          (make-var 'y 1)))))))))
     (test
       test-termreduce ; Simplify term list
       (; 0 == 0

@@ -57,7 +57,7 @@
 ; Simplify term list
 ;; Add terms of the same order
 (defun termreduce (poly)
-  ((tokenreduce term+ equal-orderp) (filter id poly)))
+  (termsort ((tokenreduce term+ equal-orderp) (filter id poly))))
 
 ; Simplify variable list
 ;; Multiply variables with the same symbol
@@ -73,13 +73,33 @@
              (filter (equal-funp not (car tokens)) (cdr tokens))))
       nil)))
 
+; Sort term list
+(defun termsort (terms)
+  (sort terms term<))
+
 ; Sort variable list
-;; Sort in lexicographical order
 (defun varsort (variables)
   (sort variables var<))
 
-; Compare two variables
-;; Check if the first comes before the second in lexicographical order
+; Compare two terms in lexicographical order and by variable power
+(defun term< (term1 term2)
+  (cond ((null (vars term1)) nil)
+        ((null (vars term2)) t)
+        ((equal (sym (car (vars term1)))
+                (sym (car (vars term2))))
+         (termpwr> term1 term2))
+        (t (termsym< term1 term2))))
+
+; Compare two terms' first variables in lexicographical order
+(defun termsym< (term1 term2)
+  (< (sym->str (sym (car (vars term1))))
+     (sym->str (sym (car (vars term2))))))
+
+; Compare two terms' first variables by power
+(defun termpwr> (term1 term2)
+  (> (pwr (car (vars term1))) (pwr (car (vars term2)))))
+
+; Compare two variables in lexicographical order
 (defun var< (var1 var2)
   (< (sym->str (sym var1)) (sym->str (sym var2))))
 
