@@ -66,6 +66,7 @@
   (varsort (filter id ((tokenreduce var* equal-symp)
                        (filter id vars)))))
 
+;; Reduce similar tokens and recurse on the remaining ones
 (defun tokenreduce (reduce-fun equal-funp)
   (lambda (tokens)
     (if tokens
@@ -113,35 +114,36 @@
 (defun equal-symp (fun var)
   ((equal-tokenp sym) fun var))
 
+;; When fun is id, check if tokens are equal
+;; when fun is not, check if tokens are not equal
 (defun equal-tokenp (attr)
   (lambda (fun token1)
     (lambda (token2)
       (fun (equal (attr token1) (attr token2))))))
 
 ; Simplify term
-;; Return an empty list if it simplifies to zero
 (defun termsimplify (term)
   ((tokensimplify coeff) term))
 
 ; Simplify variable
-;; Return an empty list if it simplifies to one
 (defun varsimplify (var)
   ((tokensimplify pwr) var))
 
+;; Return an empty list if a term simplifies to zero
+;; or a variable simplifies to one
 (defun tokensimplify (attr)
   (lambda (token)
     (if (zerop (attr token)) nil token)))
 
 ; Construct term list
-;; Eval each make-term
 (defun make-termlist (terms)
   (make-tokenlist terms))
 
 ; Construct variable list
-;; Eval each make-var
 (defun make-varlist (vars)
   (make-tokenlist vars))
 
+;; Eval each make-term or make-var
 (defun make-tokenlist (tokens)
   (if tokens (cons (eval (car tokens))
                    (make-tokenlist (cdr tokens)))
@@ -159,6 +161,7 @@
 (defun make-term-internal (coeff vars)
   ((make-term-lambda id) coeff vars))
 
+;; Pass variable list to fun, simplify it and simplify term
 (defun make-term-lambda (fun)
   (lambda (coeff vars)
     (termsimplify (cons coeff

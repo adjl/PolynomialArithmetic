@@ -228,6 +228,4 @@
                        (make-poly
                          '((make-term 1 '((make-var 'x 1)))
                            (make-term 1 '((make-var 'y 1)))
-                           (make-term 1 nil)))))
-       ))
-    ))
+                           (make-term 1 nil)))))))))
