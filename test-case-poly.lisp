@@ -103,6 +103,7 @@
       test-poly+ ; Call termreduce internally
                  ; Exceptional use cases are already covered in
                  ; test-make-poly and test-termreduce
+                 ; (see the implementation of poly+)
       (; 0 == 0 + 0
        (assert-equal nil
                      (poly+ nil nil))
@@ -147,6 +148,7 @@
                  ; Exceptional use cases are already covered in
                  ; test-make-poly, test-polynegate and
                  ; test-termreduce
+                 ; (see the implementation of poly-)
       (; 0 == 0 - 0
        (assert-equal nil
                      (poly- nil nil))
@@ -188,6 +190,7 @@
                  ; Exceptional use cases are already covered in
                  ; test-make-poly, test-termreduce and
                  ; test-termlist*
+                 ; (see the implementation of poly*)
       (; 0 == 0 * 0
        (assert-equal nil
                      (poly* nil nil))
