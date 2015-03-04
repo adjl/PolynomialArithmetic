@@ -2,10 +2,7 @@
 Simple polynomial arithmetic in Euscheme
 
 ## Testing
-Euscheme lacks a unit testing framework so I implemented a simple one as an exercise and for me to
-use. I wrote a unit test for each function that contributes to the overall functionality (i.e. the
-polynomial operations and auxiliary/helper functions). A unit test consists of several assert
-statements. The syntax of an assert statement is
+Euscheme lacks a unit testing framework so I implemented a simple one ([Eunit](https://github.com/adjl/Eunit)) as an exercise and for me to use. I wrote a unit test for each function that contributes to the overall functionality (i.e. the polynomial operations and auxiliary/helper functions). A unit test consists of several assert statements. The syntax of an assert statement is
 ```
 (assert-equal <expected-result> <actual-result>)
 ; argument order does not really matter but this is
@@ -44,8 +41,7 @@ A variable is represented as a cons pair
 ```
 (make-var ‘x 1) ; => ‘(x . 1)
 ```
-A term is represented as a list consisting of a number (coefficient) and a list of cons pairs
-(variables)
+A term is represented as a list consisting of a number (coefficient) and a list of cons pairs (variables)
 ```
 (make-term 2 ‘((make-var ‘x 2) (make-var ‘y 1)))
 ; => ‘(2 ((x . 2) (y . 1)))
