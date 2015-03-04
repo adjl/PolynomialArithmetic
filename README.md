@@ -67,3 +67,6 @@ A polynomial is represented as a list of lists (terms)
 ```
 (polypretty <polynomial>) ; (polypretty (make-poly ‘((make-term ... ))))
 ```
+
+## License
+[MIT License](LICENSE)
