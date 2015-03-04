@@ -1,4 +1,4 @@
-#!/u/u1/masrjb/bin/euscheme -fq
+#!/usr/bin/euscheme -fq
 
 (load "unit-test.lisp")
 (load "polynomial-arithmetic.lisp")
